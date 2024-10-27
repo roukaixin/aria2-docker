@@ -1,0 +1,7 @@
+services:
+  aria2:
+    container_name: aria2
+    image: localhost/aria2
+    command:
+      - "aria2c"
+      - "--conf-path=/aria2/config/aria2.conf"
