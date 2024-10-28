@@ -1,8 +1,8 @@
-FROM debian AS builder
+FROM debian:bookworm-slim AS builder
 
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
-ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl"
+ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
 COPY aria2-1.37.0.tar.gz /tmp
 RUN mkdir /tmp/aria2 &&  \
     tar xvf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
@@ -25,14 +25,20 @@ RUN mkdir /tmp/openssl &&  \
 
 # 编译 aria2
 RUN cd /tmp/aria2 && \
-    ./configure ARIA2_STATIC=yes --disable-rpath --enable-static=yes --enable-shared=no --with-ca-bundle='/etc/ssl/certs/ca-certificates.crt'  &&  \
+    ./configure  \
+            ARIA2_STATIC=yes  \
+            LIBS='-luv_a -lpthread -ldl -lrt ' \
+            --disable-rpath  \
+            --enable-static=yes  \
+            --enable-shared=no  \
+            --with-ca-bundle='/etc/ssl/certs/ca-certificates.crt'  &&  \
     make &&  \
     strip src/aria2c
 
 
 
 
-FROM alpine
+FROM alpine:3.20.3
 
 COPY s6-overlay-noarch.tar.xz /tmp
 RUN tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
