@@ -1,14 +1,29 @@
-FROM alpine AS builder
+FROM debian AS builder
 
-ARG MAKE_PACKAGE="g++ gcc make pkgconfig"
-ARG ARIA2_TEST="cppunit"
-ARG BASE_PACKAGE="openssl-dev libssh2-dev expat-dev zlib-dev c-ares-dev sqlite-dev"
+ARG MAKE_PACKAGE="build-essential make pkg-config"
+ARG ARIA2_TEST="libcppunit-dev"
+ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl"
 COPY aria2-1.37.0.tar.gz /tmp
-RUN mkdir /tmp/aria2 && tar xvf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
-    apk update &&  \
-    apk add --no-cache ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
+RUN mkdir /tmp/aria2 &&  \
+    tar xvf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
+    apt update &&  \
+    apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
 
+
+COPY openssl-3.4.0.tar.gz /tmp
+RUN mkdir /tmp/openssl &&  \
+    tar xvf /tmp/openssl-3.4.0.tar.gz -C /tmp/openssl --strip-components=1 &&  \
+    cd /tmp/openssl &&  \
+    sed -i '/^default = default_sect/a legacy = legacy_sect' apps/openssl.cnf && \
+    sed -i '/^providers = provider_sect/a [legacy_sect]\nactivate = 1' apps/openssl.cnf && \
+    sed -i 's/^# activate = 1/activate = 1/' apps/openssl.cnf && \
+    ./Configure --libdir=lib no-tests -no-shared no-module  enable-weak-ssl-ciphers &&  \
+    make &&  \
+    make install
+
+
+# 编译 aria2
 RUN cd /tmp/aria2 && \
     ./configure ARIA2_STATIC=yes --disable-rpath --enable-static=yes --enable-shared=no --with-ca-bundle='/etc/ssl/certs/ca-certificates.crt'  &&  \
     make &&  \
