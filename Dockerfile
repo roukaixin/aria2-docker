@@ -40,6 +40,8 @@ RUN cd /tmp/aria2 && \
 
 FROM alpine:3.20.3
 
+LABEL author=roukaixin
+
 COPY s6-overlay-noarch.tar.xz /tmp
 RUN tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
 COPY s6-overlay-x86_64.tar.xz /tmp
@@ -49,7 +51,7 @@ RUN rm -rf /tmp
 WORKDIR /aria2
 COPY --from=builder /tmp/aria2/src/aria2c bin/
 COPY /rootfs/etc/ /etc/
-RUN mkdir -p config .aria2 &&  \
+RUN mkdir -p config .aria2 download &&  \
     touch .aria2/aria2.session &&  \
     cp /etc/aria2/config/aria2.conf config/ && \
     find /etc/s6-overlay/scripts -type f -exec chmod +x {} \;
@@ -57,7 +59,9 @@ RUN addgroup -g 1000 aria2 && adduser -D -G aria2 -u 1000 -h /aria2 aria2  && ch
 
 USER aria2:aria2
 
-ENV PATH /aria2/bin:$PATH
+EXPOSE 6800 6881-6999/udp 6881-6999
+
+ENV PATH=/aria2/bin:$PATH S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
 ENTRYPOINT [ "/init" ]
 CMD [ "aria2c", "--conf-path=/aria2/config/aria2.conf" ]
