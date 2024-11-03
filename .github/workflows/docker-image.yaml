@@ -10,10 +10,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Custom builder
-        run:  docker buildx create \
-              --name container-builder \
-              --driver docker-container \
-              --bootstrap --use
+        run:  docker buildx create --name container-builder --driver docker-container --bootstrap --use
       - name: Build the Docker image
         run: docker buildx build --platform linux/amd64,linux/arm64 --tag roukaixin/aria2:1.37.0 .
       - name: Cat image
