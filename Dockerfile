@@ -1,4 +1,5 @@
-FROM debian:bookworm-slim AS builder
+# syntax=docker/dockerfile:1
+FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
 
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
@@ -42,10 +43,14 @@ FROM alpine:3.20.3
 
 LABEL author=roukaixin
 
+ARG BUILDARCH
+
 COPY s6-overlay-noarch.tar.xz /tmp
 RUN tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
 COPY s6-overlay-x86_64.tar.xz /tmp
-RUN tar -p -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
+RUN if [ ${BUILDARCH} = 'amd64' ]; then \
+        tar -p -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz; \
+    fi
 RUN rm -rf /tmp
 
 WORKDIR /aria2
