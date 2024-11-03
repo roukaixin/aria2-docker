@@ -1,0 +1,12 @@
+name: 构建 aria2 docker 镜像
+
+on:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Docker image
+        run: docker buildx build --platform linux/amd64,linux/arm64 --tag roukaixin/aria2:1.37.0 .
