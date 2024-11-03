@@ -1,7 +1,7 @@
 services:
   aria2:
     container_name: aria2
-    image: localhost/aria2
+    image: aria2
     environment:
       CONF_PATH: false
     ports:

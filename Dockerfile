@@ -1,4 +1,5 @@
-FROM debian:bookworm-slim AS builder
+# syntax=docker/dockerfile:1
+FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
 
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
@@ -38,14 +39,25 @@ RUN cd /tmp/aria2 && \
 
 
 
-FROM alpine:3.20.3
+FROM --platform=$BUILDPLATFORM alpine:3.20.3
 
 LABEL author=roukaixin
 
-COPY s6-overlay-noarch.tar.xz /tmp
+ARG BUILDARCH
+ARG S6_OVERLAY_VERSION=3.2.0.2
+
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 RUN tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
-COPY s6-overlay-x86_64.tar.xz /tmp
-RUN tar -p -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
+
+#COPY s6-overlay-x86_64.tar.xz /tmp
+#RUN tar -p -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
+RUN if [ ${BUILDARCH} = 'amd64' ]; then \
+        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz; \
+        tar -p -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz; \
+    elif [ ${BUILDARCH} = 'arm64' ]; then \
+        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-arm.tar.xz; \
+        tar -p -C / -Jxpf /tmp/s6-overlay-arm.tar.xz; \
+    fi
 RUN rm -rf /tmp
 
 WORKDIR /aria2

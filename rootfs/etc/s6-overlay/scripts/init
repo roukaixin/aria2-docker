@@ -1,7 +1,8 @@
 #!/command/with-contenv sh
 
-if [ "${CONF_PATH}" = "False" ]; then
+if [ "${CONF_PATH}" = "False" ] || [ "${CONF_PATH}" = "false" ]; then
     echo "初始化 aria2 配置"
+    start_time=$(date +%s)
     if [ -n "${DIR}" ]; then
         sed -i "s|dir=.*|dir=${DIR}|" /aria2/config/aria2.conf
     fi
@@ -356,8 +357,9 @@ if [ "${CONF_PATH}" = "False" ]; then
     if [ -n "${TRUNCATE_CONSOLE_READOUT}" ]; then
         sed -i "s|truncate-console-readout=.*|truncate-console-readout=${TRUNCATE_CONSOLE_READOUT}|" /aria2/config/aria2.conf
     fi
-    echo "初始化 aria2 配置完成"
-elif [ "$CONF_PATH" = "True" ]; then
+    end_time=$(date +%s)
+    echo "初始化 aria2 配置完成，耗时：$((end_time - start_time))"
+elif [ "$CONF_PATH" = "True" ] || [ "${CONF_PATH}" = "true" ]; then
     echo "自定义配置文件，不需要初始化"
 else
     echo "环境变量 CONF_PATH 可选值为 true、false"
