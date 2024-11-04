@@ -14,4 +14,4 @@ jobs:
       - name: Long docker
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build the Docker image
-        run: docker buildx build --platform linux/arm64 --tag roukaixin/aria2:1.37.0 . --push
+        run: docker buildx build --platform linux/arm64,linux/amd64 --tag roukaixin/aria2:1.37.0 . --push
