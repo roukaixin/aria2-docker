@@ -9,7 +9,8 @@ ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite
 COPY aria2-1.37.0.tar.gz /tmp
 RUN mkdir /tmp/aria2 &&  \
     tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
-RUN apt update &&  \
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
+    apt update &&  \
     apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
 
 
@@ -24,20 +25,19 @@ RUN mkdir /tmp/openssl &&  \
     make &&  \
     make install
 
-ENV ARIA2_HOST=''
-RUN if [ $TARGETARCH = 'amd64' ]; then \
-        export ARIA2_HOST=x86_64-linux-gnu; \
-    elif [ $TARGETARCH = 'arm64' ]; then \
-        export ARIA2_HOST=aarch64-linux-gnu; \
-    elif [ $TARGETARCH = '386' ]; then \
-        export ARIA2_HOST=i686-linux-gnu; \
-    fi
-
 # 编译 aria2
 RUN cd /tmp/aria2 && \
+    ARIA2_HOST='' && \
+    if [ $TARGETARCH = 'amd64' ]; then \
+        ARIA2_HOST='x86_64-linux-gnu'; \
+    elif [ $TARGETARCH = 'arm64' ]; then \
+        ARIA2_HOST='aarch64-linux-gnu'; \
+    elif [ $TARGETARCH = '386' ]; then \
+        ARIA2_HOST='i686-linux-gnu'; \
+    fi && \
     ./configure  \
             ARIA2_STATIC=yes  \
-            --host=$ARIA2_HOST \
+            --host="$(ARIA2_HOST)" \
             LIBS='-luv_a -lpthread -ldl -lrt ' \
             --disable-rpath  \
             --enable-static=yes  \
