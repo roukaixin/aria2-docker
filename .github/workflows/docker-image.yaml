@@ -13,5 +13,7 @@ jobs:
         run:  docker buildx create --name container-builder --driver docker-container --bootstrap --use
       - name: Long docker
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Install qemu
+        run: docker run --privileged --rm tonistiigi/binfmt --install all
       - name: Build the Docker image
         run: docker buildx build --platform linux/arm64,linux/amd64 --tag roukaixin/aria2:1.37.0 . --push

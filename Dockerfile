@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM debian:bookworm-slim AS builder
 
-ARG TARGETARCH
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
