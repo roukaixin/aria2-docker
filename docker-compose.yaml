@@ -1,12 +1,31 @@
 services:
   aria2:
     container_name: aria2
-    image: aria2
+    image: roukaixin/aria2:1.37.0
     environment:
       CONF_PATH: false
     ports:
       - "6800:6800"
       - "6881-6999:6881-6999"
-    command:
-      - "aria2c"
-      - "--conf-path=/aria2/config/aria2.conf"
+    networks:
+      - aria2
+    restart: unless-stopped
+
+  ariang:
+    image: p3terx/ariang
+    container_name: ariang
+    ports:
+      - "6880:6880"
+    logging:
+      options:
+        max-size: 1m
+    networks:
+      - aria2
+    restart: unless-stopped
+    depends_on:
+      - aria2
+
+networks:
+  aria2:
+    name: aria2
+    external: false
