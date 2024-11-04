@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Custom builder
         run:  docker buildx create --name container-builder --driver docker-container --bootstrap --use
+      - name: Long docker
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build the Docker image
-        run: docker buildx build --platform linux/amd64,linux/arm64 --tag roukaixin/aria2:1.37.0 . --load
-      - name: Cat image
-        run: docker buildx imagetools inspect roukaixin/aria2:1.37.0
+        run: docker buildx build --platform linux/arm64 --tag roukaixin/aria2:1.37.0 . --push
