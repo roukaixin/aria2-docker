@@ -26,7 +26,7 @@ RUN mkdir /tmp/openssl &&  \
 
 ENV ARIA2_HOST=''
 RUN if [ '${TARGETARCH}' = 'arm64' ]; then \
-        ARIA2_HOST='aarch64-linux-gnu'\
+        ARIA2_HOST='aarch64-linux-gnu'; \
     fi
 
 # 编译 aria2
