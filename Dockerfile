@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1
 FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
 
+ARG TARGETARCH
+
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
@@ -35,7 +37,7 @@ RUN if [ $TARGETARCH = 'amd64' ]; then \
 RUN cd /tmp/aria2 && \
     ./configure  \
             ARIA2_STATIC=yes  \
-            --host=${ARIA2_HOST} \
+            --host=$ARIA2_HOST \
             LIBS='-luv_a -lpthread -ldl -lrt ' \
             --disable-rpath  \
             --enable-static=yes  \
