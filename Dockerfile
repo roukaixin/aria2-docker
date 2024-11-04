@@ -1,14 +1,17 @@
 # syntax=docker/dockerfile:1
 FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
 
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM"
+
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
 COPY aria2-1.37.0.tar.gz /tmp
 RUN mkdir /tmp/aria2 &&  \
     tar xvf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
-    apt update &&  \
+RUN apt update &&  \
     apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
 
 
@@ -39,7 +42,7 @@ RUN cd /tmp/aria2 && \
 
 
 
-FROM --platform=$BUILDPLATFORM alpine:3.20.3
+FROM alpine:3.20.3
 
 LABEL author=roukaixin
 
