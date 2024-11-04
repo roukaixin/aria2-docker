@@ -1,8 +1,7 @@
 # syntax=docker/dockerfile:1
-FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
+FROM debian:bookworm-slim AS builder
 
 ARG TARGETARCH
-ARG CROSS_BUILDER='gcc-aarch64-linux-gnu'
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
@@ -11,7 +10,7 @@ RUN mkdir /tmp/aria2 &&  \
     tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
 RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
     apt update &&  \
-    apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE} ${CROSS_BUILDER}
+    apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
 
 COPY openssl-3.4.0.tar.gz /tmp
 RUN mkdir /tmp/openssl &&  \
@@ -24,21 +23,10 @@ RUN mkdir /tmp/openssl &&  \
     make &&  \
     make install
 
-RUN if [ ${TARGETARCH} = 'arm64' ]; then \
-        echo 'aarch64-linux-gnu' > /tmp/ARIA2_HOST; \
-        echo 'aarch64-linux-gnu-gcc' > /tmp/CC; \
-        echo 'aarch64-linux-gnu-g++' > /tmp/CXX; \
-    elif [ ${TARGETARCH} = 'amd64' ]; then \
-        echo 'x86_64-linux-gnu' > /tmp/ARIA2_HOST; \
-    fi
-
 # 编译 aria2
 RUN cd /tmp/aria2 && \
     ./configure  \
             ARIA2_STATIC=yes  \
-            CC=$(cat /tmp/CC) \
-            CXX=$(cat /tmp/CXX) \
-            --host=$(cat /tmp/ARIA2_HOST) \
             LIBS='-luv_a -lpthread -ldl -lrt ' \
             --disable-rpath  \
             --enable-static=yes  \
