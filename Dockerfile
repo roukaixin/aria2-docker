@@ -1,20 +1,19 @@
 # syntax=docker/dockerfile:1
 FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
 
-ARG ARIA2_HOST
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
 COPY aria2-1.37.0.tar.gz /tmp
 RUN mkdir /tmp/aria2 &&  \
-    tar xvf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
+    tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
 RUN apt update &&  \
     apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
 
 
 COPY openssl-3.4.0.tar.gz /tmp
 RUN mkdir /tmp/openssl &&  \
-    tar xvf /tmp/openssl-3.4.0.tar.gz -C /tmp/openssl --strip-components=1 &&  \
+    tar xf /tmp/openssl-3.4.0.tar.gz -C /tmp/openssl --strip-components=1 &&  \
     cd /tmp/openssl &&  \
     sed -i '/^default = default_sect/a legacy = legacy_sect' apps/openssl.cnf && \
     sed -i '/^providers = provider_sect/a [legacy_sect]\nactivate = 1' apps/openssl.cnf && \
@@ -23,11 +22,12 @@ RUN mkdir /tmp/openssl &&  \
     make &&  \
     make install
 
+ENV ARIA2_HOST ''
 RUN if [ $TARGETARCH = 'amd64' ]; then \
-        ARIA2_HOST=x86_64-linux-gnu; \
+        ARIA2_HOST=; \
     elif [ $TARGETARCH = 'arm64' ]; then \
         ARIA2_HOST=aarch64-linux-gnu; \
-    elif [ $TARGETARCH = 'i386' ]; then \
+    elif [ $TARGETARCH = '386' ]; then \
         ARIA2_HOST=i686-linux-gnu; \
     fi
 
@@ -51,16 +51,16 @@ FROM alpine:3.20.3
 
 LABEL author=roukaixin
 
-ARG BUILDARCH
+ARG TARGETARCH
 ARG S6_OVERLAY_VERSION=3.2.0.2
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 RUN tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
 
-RUN if [ ${BUILDARCH} = 'amd64' ]; then \
+RUN if [ ${TARGETARCH} = 'amd64' ]; then \
         wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz; \
         tar -p -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz; \
-    elif [ ${BUILDARCH} = 'arm64' ]; then \
+    elif [ ${TARGETARCH} = 'arm64' ]; then \
         wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-arm.tar.xz; \
         tar -p -C / -Jxpf /tmp/s6-overlay-arm.tar.xz; \
     fi
