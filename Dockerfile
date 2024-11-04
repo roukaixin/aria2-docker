@@ -24,18 +24,21 @@ RUN mkdir /tmp/openssl &&  \
     make &&  \
     make install
 
-ENV ARIA2_HOST=''
-RUN if [ '${TARGETARCH}' = 'arm64' ]; then \
-        ARIA2_HOST='aarch64-linux-gnu'; \
+RUN if [ ${TARGETARCH} = 'arm64' ]; then \
+        echo 'aarch64-linux-gnu' > /tmp/ARIA2_HOST; \
+        echo 'aarch64-linux-gnu-gcc' > /tmp/CC; \
+        echo 'aarch64-linux-gnu-g++' > /tmp/CXX; \
+    elif [ ${TARGETARCH} = 'amd64' ]; then \
+        echo 'x86_64-linux-gnu' > /tmp/ARIA2_HOST; \
     fi
 
 # 编译 aria2
 RUN cd /tmp/aria2 && \
     ./configure  \
             ARIA2_STATIC=yes  \
-            CC=aarch64-linux-gnu-gcc \
-            CXX=aarch64-linux-gnu-g++ \
-            --host=${ARIA2_HOST} \
+            CC=$(cat /tmp/CC) \
+            CXX=$(cat /tmp/CXX) \
+            --host=$(cat /tmp/ARIA2_HOST) \
             LIBS='-luv_a -lpthread -ldl -lrt ' \
             --disable-rpath  \
             --enable-static=yes  \
