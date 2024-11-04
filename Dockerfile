@@ -28,16 +28,16 @@ RUN mkdir /tmp/openssl &&  \
 # 编译 aria2
 RUN cd /tmp/aria2 && \
     ARIA2_HOST='' && \
-    if [ $TARGETARCH = 'amd64' ]; then \
+    if [ '$TARGETARCH' = 'amd64' ]; then \
         ARIA2_HOST='x86_64-linux-gnu'; \
-    elif [ $TARGETARCH = 'arm64' ]; then \
+    elif [ '$TARGETARCH' = 'arm64' ]; then \
         ARIA2_HOST='aarch64-linux-gnu'; \
-    elif [ $TARGETARCH = '386' ]; then \
+    elif [ '$TARGETARCH' = '386' ]; then \
         ARIA2_HOST='i686-linux-gnu'; \
     fi && \
     ./configure  \
             ARIA2_STATIC=yes  \
-            --host="$(ARIA2_HOST)" \
+            --host="$ARIA2_HOST" \
             LIBS='-luv_a -lpthread -ldl -lrt ' \
             --disable-rpath  \
             --enable-static=yes  \
