@@ -25,11 +25,12 @@ RUN mkdir /tmp/openssl &&  \
     make &&  \
     make install
 
+ARG TARGETOS
 # 编译 aria2
 RUN cd /tmp/aria2 && \
     ./configure  \
             ARIA2_STATIC=yes  \
-            --host=$TARGETARCH \
+            --host=$TARGETARCH-$TARGETOS \
             LIBS='-luv_a -lpthread -ldl -lrt ' \
             --disable-rpath  \
             --enable-static=yes  \
