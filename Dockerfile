@@ -1,11 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
 
-ARG TARGETARCH
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
-RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM, $TARGETARCH"
-
+ARG ARIA2_HOST
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
@@ -27,11 +23,19 @@ RUN mkdir /tmp/openssl &&  \
     make &&  \
     make install
 
+RUN if [ $TARGETARCH = 'amd64' ]; then \
+        ARIA2_HOST=x86_64-linux-gnu; \
+    elif [ $TARGETARCH = 'arm64' ]; then \
+        ARIA2_HOST=aarch64-linux-gnu; \
+    elif [ $TARGETARCH = 'i386' ]; then \
+        ARIA2_HOST=i686-linux-gnu; \
+    fi
 
 # 编译 aria2
 RUN cd /tmp/aria2 && \
     ./configure  \
             ARIA2_STATIC=yes  \
+            --host=${ARIA2_HOST} \
             LIBS='-luv_a -lpthread -ldl -lrt ' \
             --disable-rpath  \
             --enable-static=yes  \
@@ -52,8 +56,6 @@ ARG S6_OVERLAY_VERSION=3.2.0.2
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 RUN tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
-
-RUN echo $(uname -m)
 
 RUN if [ ${BUILDARCH} = 'amd64' ]; then \
         wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz; \
