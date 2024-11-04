@@ -22,13 +22,13 @@ RUN mkdir /tmp/openssl &&  \
     make &&  \
     make install
 
-ENV ARIA2_HOST ''
+ENV ARIA2_HOST=''
 RUN if [ $TARGETARCH = 'amd64' ]; then \
-        ARIA2_HOST=; \
+        export ARIA2_HOST=x86_64-linux-gnu; \
     elif [ $TARGETARCH = 'arm64' ]; then \
-        ARIA2_HOST=aarch64-linux-gnu; \
+        export ARIA2_HOST=aarch64-linux-gnu; \
     elif [ $TARGETARCH = '386' ]; then \
-        ARIA2_HOST=i686-linux-gnu; \
+        export ARIA2_HOST=i686-linux-gnu; \
     fi
 
 # 编译 aria2
