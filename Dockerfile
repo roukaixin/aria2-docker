@@ -33,6 +33,8 @@ RUN if [ '${TARGETARCH}' = 'arm64' ]; then \
 RUN cd /tmp/aria2 && \
     ./configure  \
             ARIA2_STATIC=yes  \
+            CC=aarch64-linux-gnu-gcc \
+            CXX=aarch64-linux-gnu-g++ \
             --host=${ARIA2_HOST} \
             LIBS='-luv_a -lpthread -ldl -lrt ' \
             --disable-rpath  \
