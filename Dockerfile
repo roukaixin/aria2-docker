@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM debian:unstable-slim AS builder
 
-ARG MAKE_PACKAGE="build-essential make pkg-config libc6-dev"
+ARG MAKE_PACKAGE="build-essential make pkg-config linux-libc-dev"
 ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
 COPY aria2-1.37.0.tar.gz /tmp
