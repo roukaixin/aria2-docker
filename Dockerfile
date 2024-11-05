@@ -7,8 +7,7 @@ ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite
 COPY aria2-1.37.0.tar.gz /tmp
 RUN mkdir /tmp/aria2 &&  \
     tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
-    apt update &&  \
+RUN apt update &&  \
     apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
 
 COPY openssl-3.4.0.tar.gz /tmp
@@ -41,18 +40,33 @@ FROM alpine:3.20.3
 
 LABEL author=roukaixin
 
-ARG TARGETARCH
+ARG TARGETPLATFORM
 ARG S6_OVERLAY_VERSION=3.2.0.2
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 RUN tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
 
-RUN if [ ${TARGETARCH} = 'amd64' ]; then \
+RUN if [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
         wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz; \
         tar -p -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz; \
-    elif [ ${TARGETARCH} = 'arm64' ]; then \
-        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-arm.tar.xz; \
-        tar -p -C / -Jxpf /tmp/s6-overlay-arm.tar.xz; \
+    elif [ ${TARGETPLATFORM} = 'linux/arm64/v8' ]; then \
+        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-aarch64.tar.xz; \
+        tar -p -C / -Jxpf /tmp/s6-overlay-aarch64.tar.xz; \
+    elif [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
+        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-armhf.tar.xz; \
+        tar -p -C / -Jxpf /tmp/s6-overlay-armhf.tar.xz; \
+    elif [ ${TARGETPLATFORM} = 'linux/386' ]; then \
+        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-i686.tar.xz; \
+        tar -p -C / -Jxpf /tmp/s6-overlay-i686.tar.xz; \
+    elif [ ${TARGETPLATFORM} = 'linux/riscv64' ]; then \
+        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-riscv64.tar.xz; \
+        tar -p -C / -Jxpf /tmp/s6-overlay-riscv64.tar.xz; \
+    elif [ ${TARGETPLATFORM} = 'linux/ppc64le' ]; then \
+        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-powerpc64le.tar.xz; \
+        tar -p -C / -Jxpf /tmp/s6-overlay-powerpc64le.tar.xz; \
+    elif [ ${TARGETPLATFORM} = 'linux/s390x' ]; then \
+        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-s390x.tar.xz; \
+        tar -p -C / -Jxpf /tmp/s6-overlay-s390x.tar.xz; \
     fi
 RUN rm -rf /tmp
 
