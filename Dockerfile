@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM debian:unstable-slim AS builder
+FROM debian:sid-slim AS builder
 
 ARG MAKE_PACKAGE="build-essential make pkg-config gcc-multilib"
 ARG ARIA2_TEST="libcppunit-dev"
