@@ -16,4 +16,4 @@ jobs:
       - name: Install qemu
         run: docker run --privileged --rm tonistiigi/binfmt --install all
       - name: Build the Docker image
-        run: docker buildx build --platform linux/amd64,linux/arm64/v8,linux/arm/v7,linux/386,linux/riscv64,linux/ppc64le,linux/s390x --tag roukaixin/aria2:1.37.0 . --push
+        run: docker buildx build --platform linux/amd64,linux/arm64/v8,linux/arm/v7,linux/riscv64,linux/ppc64le,linux/s390x --tag roukaixin/aria2:1.37.0 . --push
