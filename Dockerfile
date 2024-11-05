@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM debian:sid-slim AS builder
 
+ARG TARGETPLATFORM
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev"
@@ -17,7 +18,11 @@ RUN mkdir /tmp/openssl &&  \
     sed -i '/^default = default_sect/a legacy = legacy_sect' apps/openssl.cnf && \
     sed -i '/^providers = provider_sect/a [legacy_sect]\nactivate = 1' apps/openssl.cnf && \
     sed -i 's/^# activate = 1/activate = 1/' apps/openssl.cnf && \
-    ./Configure --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers &&  \
+    if [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
+        ./Configure linux-armv4 --libdir=lib no-tests no-shared no-module enable-weak-ssl-ciphers -mfloat-abi=soft;  \
+    else  \
+        ./Configure --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers;  \
+    fi && \
     make &&  \
     make install
 
