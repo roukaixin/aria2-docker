@@ -17,7 +17,7 @@ RUN mkdir /tmp/openssl &&  \
     sed -i '/^default = default_sect/a legacy = legacy_sect' apps/openssl.cnf && \
     sed -i '/^providers = provider_sect/a [legacy_sect]\nactivate = 1' apps/openssl.cnf && \
     sed -i 's/^# activate = 1/activate = 1/' apps/openssl.cnf && \
-    ./Configure --libdir=lib no-tests -no-shared no-module  enable-weak-ssl-ciphers &&  \
+    ./Configure linux-elf --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers &&  \
     make &&  \
     make install
 
