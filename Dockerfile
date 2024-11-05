@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM debian:bookworm AS builder
+FROM debian:unstable-slim AS builder
 
 ARG MAKE_PACKAGE="build-essential make pkg-config"
 ARG ARIA2_TEST="libcppunit-dev"
