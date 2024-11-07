@@ -9,7 +9,7 @@ COPY aria2-1.37.0.tar.gz /tmp
 RUN mkdir /tmp/aria2 &&  \
     tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
 RUN apt update &&  \
-    apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
+    apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE} libc6-dev
 
 COPY openssl-3.4.0.tar.gz /tmp
 RUN mkdir /tmp/openssl &&  \
