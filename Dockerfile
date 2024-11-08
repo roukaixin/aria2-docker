@@ -1,18 +1,11 @@
 # syntax=docker/dockerfile:1
-FROM debian:sid-slim AS builder
+FROM alpine:3.20.3 AS builder
 
-ARG TARGETPLATFORM
-ARG MAKE_PACKAGE="build-essential make pkg-config"
-ARG ARIA2_TEST="libcppunit-dev"
-ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev gcc g++"
+ARG PACKAGE="g++ gcc build-base pkgconf make linux-headers cppunit-dev libssh2-dev expat-dev zlib-dev c-ares-dev sqlite-dev libgpg-error-dev perl-dev libuv-dev"
+ARG STATIC_PACKAGE="libssh2-static expat-static zlib-static c-ares-static sqlite-static libgpg-error-static libuv-static"
 
-RUN apt update &&  \
-    apt upgrade -y && \
-    apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
-
-COPY aria2-1.37.0.tar.gz /tmp
-RUN mkdir /tmp/aria2 &&  \
-    tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1
+RUN apk update && \
+    apk add --no-cache ${PACKAGE} ${STATIC_PACKAGE}
 
 COPY openssl-3.4.0.tar.gz /tmp
 RUN mkdir /tmp/openssl &&  \
@@ -22,22 +15,25 @@ RUN mkdir /tmp/openssl &&  \
     sed -i '/^providers = provider_sect/a [legacy_sect]\nactivate = 1' apps/openssl.cnf && \
     sed -i 's/^# activate = 1/activate = 1/' apps/openssl.cnf && \
     ./Configure --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers &&  \
-    make &&  \
+    make -j2 &&  \
     make install
 
-# 编译 aria2
-RUN cd /tmp/aria2 && \
+# 复制 aria2
+COPY aria2-1.37.0.tar.gz /tmp
+
+# 解压 aria2并编译 aria2
+RUN mkdir /tmp/aria2 &&  \
+    tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1 &&  \
+    cd /tmp/aria2 && \
     ./configure  \
             ARIA2_STATIC=yes  \
-            LIBS='-luv_a -lpthread -ldl -lrt ' \
+            --with-libuv \
             --disable-rpath  \
             --enable-static=yes  \
             --enable-shared=no  \
-            --with-ca-bundle='/etc/ssl/certs/ca-certificates.crt'  &&  \
+            --with-ca-bundle='/etc/ssl/certs/ca-certificates.crt' || (cat config.log && false)  &&  \
     make &&  \
     strip src/aria2c
-
-
 
 
 FROM alpine:3.20.3
