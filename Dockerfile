@@ -7,7 +7,7 @@ ARG ARIA2_TEST="libcppunit-dev"
 ARG BASE_PACKAGE="libssh2-1-dev libexpat1-dev zlib1g-dev libc-ares-dev libsqlite3-dev libgpg-error-dev perl libuv1-dev gcc g++"
 
 RUN apt update &&  \
-    apt upgrade && \
+    apt upgrade -y && \
     apt install -y ${MAKE_PACKAGE} ${ARIA2_TEST} ${BASE_PACKAGE}
 
 COPY aria2-1.37.0.tar.gz /tmp
