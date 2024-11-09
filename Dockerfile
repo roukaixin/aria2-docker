@@ -1,24 +1,39 @@
 # syntax=docker/dockerfile:1
 FROM debian:trixie-20241016 AS builder
 
-ARG PACKAGE="libuv1-dev perl libgpg-error-dev libsqlite3-dev libc-ares-dev zlib1g-dev libexpat1-dev libssh2-1-dev libcppunit-dev make pkgconf build-essential"
+ARG PACKAGE="libuv1-dev perl libgpg-error-dev libsqlite3-dev zlib1g-dev libexpat1-dev libssh2-1-dev libcppunit-dev make pkgconf build-essential"
 
 RUN apt-get update && \
     apt-get install -y ${PACKAGE}
 
-COPY openssl-3.4.0.tar.gz /tmp
-RUN mkdir /tmp/openssl &&  \
+# 复制全部软件包到 /tmp
+COPY package/* /tmp
+
+# 编译 c-ares
+RUN mkdir /tmp/c-ares && \
+    tar xf /tmp/c-ares-1.34.2.tar.gz -C /tmp/c-ares --strip-components=1 && \
+    cd /tmp/c-ares && \
+    ./configure --disable-shared --enable-static && \
+    make -j2 && \
+    make install
+
+ENV OPENSSL_HOST=''
+RUN if [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
+        HOST='linux-armv4'; \
+    fi && \
+    echo "OPENSSL_HOST=$OPENSSL_HOST" >> /etc/environment
+
+# 编译 openssl
+RUN . /etc/environment && \
+    mkdir /tmp/openssl &&  \
     tar xf /tmp/openssl-3.4.0.tar.gz -C /tmp/openssl --strip-components=1 &&  \
     cd /tmp/openssl &&  \
     sed -i '/^default = default_sect/a legacy = legacy_sect' apps/openssl.cnf && \
     sed -i '/^providers = provider_sect/a [legacy_sect]\nactivate = 1' apps/openssl.cnf && \
     sed -i 's/^# activate = 1/activate = 1/' apps/openssl.cnf && \
-    ./Configure --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers &&  \
+    ./Configure ${OPENSSL_HOST} --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers &&  \
     make -j2 &&  \
     make install
-
-# 复制 aria2
-COPY aria2-1.37.0.tar.gz /tmp
 
 # 解压 aria2并编译 aria2
 RUN mkdir /tmp/aria2 &&  \
