@@ -1,11 +1,10 @@
 # syntax=docker/dockerfile:1
-FROM alpine:3.20.3 AS builder
+FROM debian:trixie-20241016 AS builder
 
-ARG PACKAGE="g++ gcc build-base pkgconf make linux-headers cppunit-dev libssh2-dev expat-dev zlib-dev c-ares-dev sqlite-dev libgpg-error-dev perl-dev libuv-dev"
-ARG STATIC_PACKAGE="libssh2-static expat-static zlib-static c-ares-static sqlite-static libgpg-error-static libuv-static"
+ARG PACKAGE="libuv1-dev perl libgpg-error-dev libsqlite3-dev libc-ares-dev zlib1g-dev libexpat1-dev libssh2-1-dev libcppunit-dev make pkgconf build-essential"
 
-RUN apk update && \
-    apk add --no-cache ${PACKAGE} ${STATIC_PACKAGE}
+RUN apt-get update && \
+    apt-get install -y ${PACKAGE}
 
 COPY openssl-3.4.0.tar.gz /tmp
 RUN mkdir /tmp/openssl &&  \
