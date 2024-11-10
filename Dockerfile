@@ -20,8 +20,9 @@ RUN mkdir /tmp/c-ares && \
 
 ENV OPENSSL_HOST=''
 RUN if [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
-        OPENSSL_HOST='linux-armv4'; \
+        export OPENSSL_HOST='linux-armv4'; \
     fi && \
+    echo '变量值为 $OPENSSL_HOST' && \
     echo 'OPENSSL_HOST=$OPENSSL_HOST' >> /etc/environment
 
 # 编译 openssl
