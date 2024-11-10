@@ -18,12 +18,10 @@ RUN mkdir /tmp/c-ares && \
     make -j2 && \
     make install
 
-ENV OPENSSL_HOST=''
-RUN if [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
-        export OPENSSL_HOST='linux-armv4'; \
-    fi && \
-    echo '变量值为 $OPENSSL_HOST' && \
-    echo 'OPENSSL_HOST=$OPENSSL_HOST' >> /etc/environment
+RUN mkdir /etc/openssl_host && \
+    if [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
+        echo "linux-armv4" >> /tmp/openssl_host; \
+    fi
 
 # 编译 openssl
 RUN . /etc/environment && \
@@ -33,7 +31,8 @@ RUN . /etc/environment && \
     sed -i '/^default = default_sect/a legacy = legacy_sect' apps/openssl.cnf && \
     sed -i '/^providers = provider_sect/a [legacy_sect]\nactivate = 1' apps/openssl.cnf && \
     sed -i 's/^# activate = 1/activate = 1/' apps/openssl.cnf && \
-    ./Configure ${OPENSSL_HOST} --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers &&  \
+    export OPENSSL_HOST=$(cat /tmp/openssl_host) && \
+    ./Configure $OPENSSL_HOST --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers &&  \
     make -j2 &&  \
     make install
 
