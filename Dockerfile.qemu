@@ -2,6 +2,7 @@
 FROM debian:trixie-20241016 AS builder
 
 ARG PACKAGE="libuv1-dev perl libgpg-error-dev libsqlite3-dev zlib1g-dev libexpat1-dev libssh2-1-dev libcppunit-dev make pkgconf build-essential"
+ARG TARGETPLATFORM
 
 RUN apt-get update && \
     apt-get install -y ${PACKAGE}
