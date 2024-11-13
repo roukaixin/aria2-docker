@@ -29,9 +29,9 @@ RUN mkdir /etc/openssl_host && \
         echo "linux-armv4" >> /tmp/openssl_host; \
     elif [ ${TARGETPLATFORM} = 'linux/riscv64' ]; then \
         echo "linux64-riscv64" >> /tmp/openssl_host; \
-    elif [ ${TARGETPLATFORM} = 'linux-ppc64le' ]; then \
+    elif [ ${TARGETPLATFORM} = 'linux/ppc64le' ]; then \
         echo "linux-ppc64le" >> /tmp/openssl_host; \
-    elif [ ${TARGETPLATFORM} = 'linux64-s390x' ]; then \
+    elif [ ${TARGETPLATFORM} = 'linux64/s390x' ]; then \
         echo "linux64-s390x" >> /tmp/openssl_host; \
     fi
 
