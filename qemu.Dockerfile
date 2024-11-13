@@ -21,6 +21,10 @@ RUN mkdir /tmp/c-ares && \
 RUN mkdir /etc/openssl_host && \
     if [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
         echo "linux-armv4" >> /tmp/openssl_host; \
+    elif [ ${TARGETPLATFORM} = 'linux/386' ]; then \
+        echo "linux-x86" >> /tmp/openssl_host; \
+    elif [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
+        echo "linux-x86_64" >> /tmp/openssl_host; \
     fi
 
 # 编译 openssl
