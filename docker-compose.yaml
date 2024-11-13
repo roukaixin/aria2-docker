@@ -1,7 +1,7 @@
 services:
   aria2:
     container_name: aria2
-    image: roukaixin/aria2:1.37.0
+    image: roukaixin/aria2:release-1.37.0
     environment:
       CONF_PATH: false
     ports:
