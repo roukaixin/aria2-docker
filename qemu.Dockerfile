@@ -19,12 +19,20 @@ RUN mkdir /tmp/c-ares && \
     make install
 
 RUN mkdir /etc/openssl_host && \
-    if [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
-        echo "linux-armv4" >> /tmp/openssl_host; \
+    if [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
+        echo "linux-x86_64" >> /tmp/openssl_host; \
     elif [ ${TARGETPLATFORM} = 'linux/386' ]; then \
         echo "linux-x86" >> /tmp/openssl_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
-        echo "linux-x86_64" >> /tmp/openssl_host; \
+    elif [ ${TARGETPLATFORM} = 'linux/arm64/v8' ]; then \
+        echo "linux-aarch64" >> /tmp/openssl_host; \
+    elif [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
+        echo "linux-armv4" >> /tmp/openssl_host; \
+    elif [ ${TARGETPLATFORM} = 'linux/riscv64' ]; then \
+        echo "linux64-riscv64" >> /tmp/openssl_host; \
+    elif [ ${TARGETPLATFORM} = 'linux-ppc64le' ]; then \
+        echo "linux-ppc64le" >> /tmp/openssl_host; \
+    elif [ ${TARGETPLATFORM} = 'linux64-s390x' ]; then \
+        echo "linux64-s390x" >> /tmp/openssl_host; \
     fi
 
 # 编译 openssl
@@ -63,32 +71,31 @@ ARG TARGETPLATFORM
 ARG S6_OVERLAY_VERSION=3.2.0.2
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
-RUN tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
 
-ENV HOST_MACHINE=''
 RUN if [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
-        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz; \
-        tar -p -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz; \
-    elif [ ${TARGETPLATFORM} = 'linux/arm64/v8' ]; then \
-        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-aarch64.tar.xz; \
-        tar -p -C / -Jxpf /tmp/s6-overlay-aarch64.tar.xz; \
-    elif [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
-        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-armhf.tar.xz; \
-        tar -p -C / -Jxpf /tmp/s6-overlay-armhf.tar.xz; \
+        echo "x86_64" >> /tmp/s6_host; \
     elif [ ${TARGETPLATFORM} = 'linux/386' ]; then \
-        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-i686.tar.xz; \
-        tar -p -C / -Jxpf /tmp/s6-overlay-i686.tar.xz; \
+        echo "i686" >> /tmp/s6_host; \
+    elif [ ${TARGETPLATFORM} = 'linux/arm64/v8' ]; then \
+        echo "aarch64" >> /tmp/s6_host; \
+    elif [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
+        echo "armhf" >> /tmp/s6_host; \
     elif [ ${TARGETPLATFORM} = 'linux/riscv64' ]; then \
-        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-riscv64.tar.xz; \
-        tar -p -C / -Jxpf /tmp/s6-overlay-riscv64.tar.xz; \
+        echo "riscv64" >> /tmp/s6_host; \
     elif [ ${TARGETPLATFORM} = 'linux/ppc64le' ]; then \
-        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-powerpc64le.tar.xz; \
-        tar -p -C / -Jxpf /tmp/s6-overlay-powerpc64le.tar.xz; \
+        echo "powerpc64le" >> /tmp/s6_host; \
     elif [ ${TARGETPLATFORM} = 'linux/s390x' ]; then \
-        wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-s390x.tar.xz; \
-        tar -p -C / -Jxpf /tmp/s6-overlay-s390x.tar.xz; \
+        echo "s390x" >> /tmp/s6_host; \
+    else  \
+        echo "x86_64" >> /tmp/s6_host; \
     fi
-RUN rm -rf /tmp
+
+RUN export S6_HOST=$(cat /tmp/s6_host) && \
+    wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-$S6_HOST.tar.xz && \
+    tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
+    tar -p -C / -Jxpf /tmp/s6-overlay-s390x.tar.xz && \
+    rm -rf /tmp
+
 
 WORKDIR /aria2
 COPY --from=builder /tmp/aria2/src/aria2c bin/
