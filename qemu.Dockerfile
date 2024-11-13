@@ -93,7 +93,7 @@ RUN if [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
 RUN export S6_HOST=$(cat /tmp/s6_host) && \
     wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-$S6_HOST.tar.xz && \
     tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
-    tar -p -C / -Jxpf /tmp/s6-overlay-s390x.tar.xz && \
+    tar -p -C / -Jxpf /tmp/s6-overlay-$S6_HOST.tar.xz && \
     rm -rf /tmp
 
 
