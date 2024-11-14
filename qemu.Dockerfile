@@ -23,7 +23,7 @@ RUN mkdir /etc/openssl_host && \
         echo "linux-x86_64" >> /tmp/openssl_host; \
     elif [ ${TARGETPLATFORM} = 'linux/386' ]; then \
         echo "linux-x86" >> /tmp/openssl_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/arm64/v8' ]; then \
+    elif [ ${TARGETPLATFORM} = 'linux/arm64' ]; then \
         echo "linux-aarch64" >> /tmp/openssl_host; \
     elif [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
         echo "linux-armv4" >> /tmp/openssl_host; \
@@ -70,13 +70,12 @@ LABEL author=roukaixin
 ARG TARGETPLATFORM
 ARG S6_OVERLAY_VERSION=3.2.0.2
 
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 
 RUN if [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
         echo "x86_64" >> /tmp/s6_host; \
     elif [ ${TARGETPLATFORM} = 'linux/386' ]; then \
         echo "i686" >> /tmp/s6_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/arm64/v8' ]; then \
+    elif [ ${TARGETPLATFORM} = 'linux/arm64' ]; then \
         echo "aarch64" >> /tmp/s6_host; \
     elif [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
         echo "armhf" >> /tmp/s6_host; \
@@ -91,6 +90,7 @@ RUN if [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
     fi
 
 RUN export S6_HOST=$(cat /tmp/s6_host) && \
+    wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz && \
     wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-$S6_HOST.tar.xz && \
     tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
     tar -p -C / -Jxpf /tmp/s6-overlay-$S6_HOST.tar.xz && \
@@ -104,7 +104,10 @@ RUN mkdir -p config .aria2 download &&  \
     touch .aria2/aria2.session &&  \
     cp /etc/aria2/config/aria2.conf config/ && \
     find /etc/s6-overlay/scripts -type f -exec chmod +x {} \;
-RUN addgroup -g 1000 aria2 && adduser -D -G aria2 -u 1000 -h /aria2 aria2  && chown -R aria2:aria2 /aria2
+
+RUN addgroup -g 1000 aria2 &&  \
+    adduser -D -G aria2 -u 1000 -h /aria2 aria2  &&  \
+    chown -R aria2:aria2 /aria2
 
 USER aria2:aria2
 
