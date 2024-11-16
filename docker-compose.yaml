@@ -7,6 +7,8 @@ services:
     ports:
       - "6800:6800"
       - "6881-6999:6881-6999"
+    volumes:
+      - "./download:/aria2/download"
     networks:
       - aria2
     restart: unless-stopped
