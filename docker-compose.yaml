@@ -12,6 +12,7 @@ services:
     networks:
       - aria2
     restart: unless-stopped
+    dns: 8.8.8.8
 
   ariang:
     image: p3terx/ariang
