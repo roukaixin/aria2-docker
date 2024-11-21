@@ -4,358 +4,358 @@ if [ "${CONF_PATH}" = "False" ] || [ "${CONF_PATH}" = "false" ]; then
     echo "初始化 aria2 配置"
     start_time=$(date +%s)
     if [ -n "${DIR}" ]; then
-        sed -i "s|dir=.*|dir=${DIR}|" /aria2/config/aria2.conf
+        sed -i "s|^dir=.*|dir=${DIR}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_CONCURRENT_DOWNLOADS}" ]; then
-        sed -i "s|max-concurrent-downloads=.*|max-concurrent-downloads=${MAX_CONCURRENT_DOWNLOADS}|" /aria2/config/aria2.conf
+        sed -i "s|^max-concurrent-downloads=.*|max-concurrent-downloads=${MAX_CONCURRENT_DOWNLOADS}|" /aria2/config/aria2.conf
     fi
     if [ -n "${CHECK_INTEGRITY}" ]; then
-        sed -i "s|check-integrity=.*|check-integrity=${CHECK_INTEGRITY}|" /aria2/config/aria2.conf
+        sed -i "s|^check-integrity=.*|check-integrity=${CHECK_INTEGRITY}|" /aria2/config/aria2.conf
     fi
     if [ -n "${CONTINUE}" ]; then
-        sed -i "s|continue=.*|continue=${CONTINUE}|" /aria2/config/aria2.conf
+        sed -i "s|^continue=.*|continue=${CONTINUE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${CONNECT_TIMEOUT}" ]; then
-        sed -i "s|connect-timeout=.*|connect-timeout=${CONNECT_TIMEOUT}|" /aria2/config/aria2.conf
+        sed -i "s|^connect-timeout=.*|connect-timeout=${CONNECT_TIMEOUT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${DRY_RUN}" ]; then
-        sed -i "s|dry-run=.*|dry-run=${DRY_RUN}|" /aria2/config/aria2.conf
+        sed -i "s|^dry-run=.*|dry-run=${DRY_RUN}|" /aria2/config/aria2.conf
     fi
     if [ -n "${LOWEST_SPEED_LIMIT}" ]; then
-        sed -i "s|lowest-speed-limit=.*|lowest-speed-limit=${LOWEST_SPEED_LIMIT}|" /aria2/config/aria2.conf
+        sed -i "s|^lowest-speed-limit=.*|lowest-speed-limit=${LOWEST_SPEED_LIMIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_CONNECTION_PER_SERVER}" ]; then
-        sed -i "s|max-connection-per-server=.*|max-connection-per-server=${MAX_CONNECTION_PER_SERVER}|" /aria2/config/aria2.conf
+        sed -i "s|^max-connection-per-server=.*|max-connection-per-server=${MAX_CONNECTION_PER_SERVER}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_FILE_NOT_FOUND}" ]; then
-        sed -i "s|max-file-not-found=.*|max-file-not-found=${MAX_FILE_NOT_FOUND}|" /aria2/config/aria2.conf
+        sed -i "s|^max-file-not-found=.*|max-file-not-found=${MAX_FILE_NOT_FOUND}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_TRIES}" ]; then
-        sed -i "s|max-tries=.*|max-tries=${MAX_TRIES}|" /aria2/config/aria2.conf
+        sed -i "s|^max-tries=.*|max-tries=${MAX_TRIES}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MIN_SPLIT_SIZE}" ]; then
-        sed -i "s|min-split-size=.*|min-split-size=${MIN_SPLIT_SIZE}|" /aria2/config/aria2.conf
+        sed -i "s|^min-split-size=.*|min-split-size=${MIN_SPLIT_SIZE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${NO_NETRC}" ]; then
-        sed -i "s|no-netrc=.*|no-netrc=${NO_NETRC}|" /aria2/config/aria2.conf
+        sed -i "s|^no-netrc=.*|no-netrc=${NO_NETRC}|" /aria2/config/aria2.conf
     fi
     if [ -n "${REMOTE_TIME}" ]; then
-        sed -i "s|remote-time=.*|remote-time=${REMOTE_TIME}|" /aria2/config/aria2.conf
+        sed -i "s|^remote-time=.*|remote-time=${REMOTE_TIME}|" /aria2/config/aria2.conf
     fi
     if [ -n "${REUSE_URI}" ]; then
-        sed -i "s|reuse-uri=.*|reuse-uri=${REUSE_URI}|" /aria2/config/aria2.conf
+        sed -i "s|^reuse-uri=.*|reuse-uri=${REUSE_URI}|" /aria2/config/aria2.conf
     fi
     if [ -n "${RETRY_WAIT}" ]; then
-        sed -i "s|retry-wait=.*|retry-wait=${RETRY_WAIT}|" /aria2/config/aria2.conf
+        sed -i "s|^retry-wait=.*|retry-wait=${RETRY_WAIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SPLIT}" ]; then
-        sed -i "s|split=.*|split=${SPLIT}|" /aria2/config/aria2.conf
+        sed -i "s|^split=.*|split=${SPLIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${STREAM_PIECE_SELECTOR}" ]; then
-        sed -i "s|stream-piece-selector=.*|stream-piece-selector=${STREAM_PIECE_SELECTOR}|" /aria2/config/aria2.conf
+        sed -i "s|^stream-piece-selector=.*|stream-piece-selector=${STREAM_PIECE_SELECTOR}|" /aria2/config/aria2.conf
     fi
     if [ -n "${TIMEOUT}" ]; then
-        sed -i "s|timeout=.*|timeout=${TIMEOUT}|" /aria2/config/aria2.conf
+        sed -i "s|^timeout=.*|timeout=${TIMEOUT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${URI_SELECTOR}" ]; then
-        sed -i "s|uri-selector=.*|uri-selector=${URI_SELECTOR}|" /aria2/config/aria2.conf
+        sed -i "s|^uri-selector=.*|uri-selector=${URI_SELECTOR}|" /aria2/config/aria2.conf
     fi
     if [ -n "${HTTP_ACCEPT_GZIP}" ]; then
-        sed -i "s|http-accept-gzip=.*|http-accept-gzip=${HTTP_ACCEPT_GZIP}|" /aria2/config/aria2.conf
+        sed -i "s|^http-accept-gzip=.*|http-accept-gzip=${HTTP_ACCEPT_GZIP}|" /aria2/config/aria2.conf
     fi
     if [ -n "${HTTP_AUTH_CHALLENGE}" ]; then
-        sed -i "s|http-auth-challenge=.*|http-auth-challenge=${HTTP_AUTH_CHALLENGE}|" /aria2/config/aria2.conf
+        sed -i "s|^http-auth-challenge=.*|http-auth-challenge=${HTTP_AUTH_CHALLENGE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${HTTP_NO_CACHE}" ]; then
-        sed -i "s|http-no-cache=.*|http-no-cache=${HTTP_NO_CACHE}|" /aria2/config/aria2.conf
+        sed -i "s|^http-no-cache=.*|http-no-cache=${HTTP_NO_CACHE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ENABLE_HTTP_KEEP_ALIVE}" ]; then
-        sed -i "s|enable-http-keep-alive=.*|enable-http-keep-alive=${ENABLE_HTTP_KEEP_ALIVE}|" /aria2/config/aria2.conf
+        sed -i "s|^enable-http-keep-alive=.*|enable-http-keep-alive=${ENABLE_HTTP_KEEP_ALIVE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${USE_HEAD}" ]; then
-        sed -i "s|use-head=.*|use-head=${USE_HEAD}|" /aria2/config/aria2.conf
+        sed -i "s|^use-head=.*|use-head=${USE_HEAD}|" /aria2/config/aria2.conf
     fi
     if [ -n "${NO_WANT_DIGEST_HEADER}" ]; then
-        sed -i "s|no-want-digest-header=.*|no-want-digest-header=${NO_WANT_DIGEST_HEADER}|" /aria2/config/aria2.conf
+        sed -i "s|^no-want-digest-header=.*|no-want-digest-header=${NO_WANT_DIGEST_HEADER}|" /aria2/config/aria2.conf
     fi
     if [ -n "${USER_AGENT}" ]; then
-        sed -i "s|user-agent=.*|user-agent=${USER_AGENT}|" /aria2/config/aria2.conf
+        sed -i "s|^user-agent=.*|user-agent=${USER_AGENT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${FTP_PASV}" ]; then
-        sed -i "s|ftp-pasv=.*|ftp-pasv=${FTP_PASV}|" /aria2/config/aria2.conf
+        sed -i "s|^ftp-pasv=.*|ftp-pasv=${FTP_PASV}|" /aria2/config/aria2.conf
     fi
     if [ -n "${FTP_TYPE}" ]; then
-        sed -i "s|ftp-type=.*|ftp-type=${FTP_TYPE}|" /aria2/config/aria2.conf
+        sed -i "s|^ftp-type=.*|ftp-type=${FTP_TYPE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${FTP_REUSE_CONNECTION}" ]; then
-        sed -i "s|ftp-reuse-connection=.*|ftp-reuse-connection=${FTP_REUSE_CONNECTION}|" /aria2/config/aria2.conf
+        sed -i "s|^ftp-reuse-connection=.*|ftp-reuse-connection=${FTP_REUSE_CONNECTION}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SHOW_FILES}" ]; then
-        sed -i "s|show-files=.*|show-files=${SHOW_FILES}|" /aria2/config/aria2.conf
+        sed -i "s|^show-files=.*|show-files=${SHOW_FILES}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_DETACH_SEED_ONLY}" ]; then
-        sed -i "s|bt-detach-seed-only=.*|bt-detach-seed-only=${BT_DETACH_SEED_ONLY}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-detach-seed-only=.*|bt-detach-seed-only=${BT_DETACH_SEED_ONLY}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_ENABLE_HOOK_AFTER_HASH_CHECK}" ]; then
-        sed -i "s|bt-enable-hook-after-hash-check=.*|bt-enable-hook-after-hash-check=${BT_ENABLE_HOOK_AFTER_HASH_CHECK}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-enable-hook-after-hash-check=.*|bt-enable-hook-after-hash-check=${BT_ENABLE_HOOK_AFTER_HASH_CHECK}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_ENABLE_LPD}" ]; then
-        sed -i "s|bt-enable-lpd=.*|bt-enable-lpd=${BT_ENABLE_LPD}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-enable-lpd=.*|bt-enable-lpd=${BT_ENABLE_LPD}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_FORCE_ENCRYPTION}" ]; then
-        sed -i "s|bt-force-encryption=.*|bt-force-encryption=${BT_FORCE_ENCRYPTION}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-force-encryption=.*|bt-force-encryption=${BT_FORCE_ENCRYPTION}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_HASH_CHECK_SEED}" ]; then
-        sed -i "s|bt-hash-check-seed=.*|bt-hash-check-seed=${BT_HASH_CHECK_SEED}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-hash-check-seed=.*|bt-hash-check-seed=${BT_HASH_CHECK_SEED}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_LOAD_SAVED_METADATA}" ]; then
-        sed -i "s|bt-load-saved-metadata=.*|bt-load-saved-metadata=${BT_LOAD_SAVED_METADATA}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-load-saved-metadata=.*|bt-load-saved-metadata=${BT_LOAD_SAVED_METADATA}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_MAX_OPEN_FILES}" ]; then
-        sed -i "s|bt-max-open-files=.*|bt-max-open-files=${BT_MAX_OPEN_FILES}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-max-open-files=.*|bt-max-open-files=${BT_MAX_OPEN_FILES}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_MAX_PEERS}" ]; then
-        sed -i "s|bt-max-peers=.*|bt-max-peers=${BT_MAX_PEERS}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-max-peers=.*|bt-max-peers=${BT_MAX_PEERS}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_METADATA_ONLY}" ]; then
-        sed -i "s|bt-metadata-only=.*|bt-metadata-only=${BT_METADATA_ONLY}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-metadata-only=.*|bt-metadata-only=${BT_METADATA_ONLY}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_MIN_CRYPTO_LEVEL}" ]; then
-        sed -i "s|bt-min-crypto-level=.*|bt-min-crypto-level=${BT_MIN_CRYPTO_LEVEL}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-min-crypto-level=.*|bt-min-crypto-level=${BT_MIN_CRYPTO_LEVEL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_PRIORITIZE_PIECE}" ]; then
-        sed -i "s|bt-prioritize-piece=.*|bt-prioritize-piece=${BT_PRIORITIZE_PIECE}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-prioritize-piece=.*|bt-prioritize-piece=${BT_PRIORITIZE_PIECE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_REMOVE_UNSELECTED_FILE}" ]; then
-        sed -i "s|bt-remove-unselected-file=.*|bt-remove-unselected-file=${BT_REMOVE_UNSELECTED_FILE}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-remove-unselected-file=.*|bt-remove-unselected-file=${BT_REMOVE_UNSELECTED_FILE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_REQUIRE_CRYPTO}" ]; then
-        sed -i "s|bt-require-crypto=.*|bt-require-crypto=${BT_REQUIRE_CRYPTO}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-require-crypto=.*|bt-require-crypto=${BT_REQUIRE_CRYPTO}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_REQUEST_PEER_SPEED_LIMIT}" ]; then
-        sed -i "s|bt-request-peer-speed-limit=.*|bt-request-peer-speed-limit=${BT_REQUEST_PEER_SPEED_LIMIT}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-request-peer-speed-limit=.*|bt-request-peer-speed-limit=${BT_REQUEST_PEER_SPEED_LIMIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_SAVE_METADATA}" ]; then
-        sed -i "s|bt-save-metadata=.*|bt-save-metadata=${BT_SAVE_METADATA}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-save-metadata=.*|bt-save-metadata=${BT_SAVE_METADATA}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_SEED_UNVERIFIED}" ]; then
-        sed -i "s|bt-seed-unverified=.*|bt-seed-unverified=${BT_SEED_UNVERIFIED}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-seed-unverified=.*|bt-seed-unverified=${BT_SEED_UNVERIFIED}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_STOP_TIMEOUT}" ]; then
-        sed -i "s|bt-stop-timeout=.*|bt-stop-timeout=${BT_STOP_TIMEOUT}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-stop-timeout=.*|bt-stop-timeout=${BT_STOP_TIMEOUT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_TRACKER_CONNECT_TIMEOUT}" ]; then
-        sed -i "s|bt-tracker-connect-timeout=.*|bt-tracker-connect-timeout=${BT_TRACKER_CONNECT_TIMEOUT}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-tracker-connect-timeout=.*|bt-tracker-connect-timeout=${BT_TRACKER_CONNECT_TIMEOUT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_TRACKER_INTERVAL}" ]; then
-        sed -i "s|bt-tracker-interval=.*|bt-tracker-interval=${BT_TRACKER_INTERVAL}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-tracker-interval=.*|bt-tracker-interval=${BT_TRACKER_INTERVAL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${BT_TRACKER_TIMEOUT}" ]; then
-        sed -i "s|bt-tracker-timeout=.*|bt-tracker-timeout=${BT_TRACKER_TIMEOUT}|" /aria2/config/aria2.conf
+        sed -i "s|^bt-tracker-timeout=.*|bt-tracker-timeout=${BT_TRACKER_TIMEOUT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${DHT_ENTRY_POINT}" ]; then
-        sed -i "s|dht-entry-point=.*|dht-entry-point=${DHT_ENTRY_POINT}|" /aria2/config/aria2.conf
+        sed -i "s|^dht-entry-point=.*|dht-entry-point=${DHT_ENTRY_POINT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${DHT_ENTRY_POINT6}" ]; then
-        sed -i "s|dht-entry-point6=.*|dht-entry-point6=${DHT_ENTRY_POINT6}|" /aria2/config/aria2.conf
+        sed -i "s|^dht-entry-point6=.*|dht-entry-point6=${DHT_ENTRY_POINT6}|" /aria2/config/aria2.conf
     fi
     if [ -n "${DHT_LISTEN_PORT}" ]; then
-        sed -i "s|dht-listen-port=.*|dht-listen-port=${DHT_LISTEN_PORT}|" /aria2/config/aria2.conf
+        sed -i "s|^dht-listen-port=.*|dht-listen-port=${DHT_LISTEN_PORT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${DHT_MESSAGE_TIMEOUT}" ]; then
-        sed -i "s|dht-message-timeout=.*|dht-message-timeout=${DHT_MESSAGE_TIMEOUT}|" /aria2/config/aria2.conf
+        sed -i "s|^dht-message-timeout=.*|dht-message-timeout=${DHT_MESSAGE_TIMEOUT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ENABLE_DHT}" ]; then
-        sed -i "s|enable-dht=.*|enable-dht=${ENABLE_DHT}|" /aria2/config/aria2.conf
+        sed -i "s|^enable-dht=.*|enable-dht=${ENABLE_DHT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ENABLE_DHT6}" ]; then
-        sed -i "s|enable-dht6=.*|enable-dht6=${ENABLE_DHT6}|" /aria2/config/aria2.conf
+        sed -i "s|^enable-dht6=.*|enable-dht6=${ENABLE_DHT6}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ENABLE_PEER_EXCHANGE}" ]; then
-        sed -i "s|enable-peer-exchange=.*|enable-peer-exchange=${ENABLE_PEER_EXCHANGE}|" /aria2/config/aria2.conf
+        sed -i "s|^enable-peer-exchange=.*|enable-peer-exchange=${ENABLE_PEER_EXCHANGE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${FOLLOW_TORRENT}" ]; then
-        sed -i "s|follow-torrent=.*|follow-torrent=${FOLLOW_TORRENT}|" /aria2/config/aria2.conf
+        sed -i "s|^follow-torrent=.*|follow-torrent=${FOLLOW_TORRENT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${LISTEN_PORT}" ]; then
-        sed -i "s|listen-port=.*|listen-port=${LISTEN_PORT}|" /aria2/config/aria2.conf
+        sed -i "s|^listen-port=.*|listen-port=${LISTEN_PORT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_OVERALL_UPLOAD_LIMIT}" ]; then
-        sed -i "s|max-overall-upload-limit=.*|max-overall-upload-limit=${MAX_OVERALL_UPLOAD_LIMIT}|" /aria2/config/aria2.conf
+        sed -i "s|^max-overall-upload-limit=.*|max-overall-upload-limit=${MAX_OVERALL_UPLOAD_LIMIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_UPLOAD_LIMIT}" ]; then
-        sed -i "s|max-upload-limit=.*|max-upload-limit=${MAX_UPLOAD_LIMIT}|" /aria2/config/aria2.conf
+        sed -i "s|^max-upload-limit=.*|max-upload-limit=${MAX_UPLOAD_LIMIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${PEER_ID_PREFIX}" ]; then
-        sed -i "s|peer-id-prefix=.*|peer-id-prefix=${PEER_ID_PREFIX}|" /aria2/config/aria2.conf
+        sed -i "s|^peer-id-prefix=.*|peer-id-prefix=${PEER_ID_PREFIX}|" /aria2/config/aria2.conf
     fi
     if [ -n "${PEER_AGENT}" ]; then
-        sed -i "s|peer-agent=.*|peer-agent=${PEER_AGENT}|" /aria2/config/aria2.conf
+        sed -i "s|^peer-agent=.*|peer-agent=${PEER_AGENT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SEED_RATIO}" ]; then
-        sed -i "s|seed-ratio=.*|seed-ratio=${SEED_RATIO}|" /aria2/config/aria2.conf
+        sed -i "s|^seed-ratio=.*|seed-ratio=${SEED_RATIO}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SEED_TIME}" ]; then
-        sed -i "s|seed-time=.*|seed-time=${SEED_TIME}|" /aria2/config/aria2.conf
+        sed -i "s|^seed-time=.*|seed-time=${SEED_TIME}|" /aria2/config/aria2.conf
     fi
     if [ -n "${FOLLOW_METALINK}" ]; then
-        sed -i "s|follow-metalink=.*|follow-metalink=${FOLLOW_METALINK}|" /aria2/config/aria2.conf
+        sed -i "s|^follow-metalink=.*|follow-metalink=${FOLLOW_METALINK}|" /aria2/config/aria2.conf
     fi
     if [ -n "${METALINK_PREFERRED_PROTOCOL}" ]; then
-        sed -i "s|metalink-preferred-protocol=.*|metalink-preferred-protocol=${METALINK_PREFERRED_PROTOCOL}|" /aria2/config/aria2.conf
+        sed -i "s|^metalink-preferred-protocol=.*|metalink-preferred-protocol=${METALINK_PREFERRED_PROTOCOL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${METALINK_ENABLE_UNIQUE_PROTOCOL}" ]; then
-        sed -i "s|metalink-enable-unique-protocol=.*|metalink-enable-unique-protocol=${METALINK_ENABLE_UNIQUE_PROTOCOL}|" /aria2/config/aria2.conf
+        sed -i "s|^metalink-enable-unique-protocol=.*|metalink-enable-unique-protocol=${METALINK_ENABLE_UNIQUE_PROTOCOL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ENABLE_RPC}" ]; then
-        sed -i "s|enable-rpc=.*|enable-rpc=${ENABLE_RPC}|" /aria2/config/aria2.conf
+        sed -i "s|^enable-rpc=.*|enable-rpc=${ENABLE_RPC}|" /aria2/config/aria2.conf
     fi
     if [ -n "${PAUSE}" ]; then
-        sed -i "s|pause=.*|pause=${PAUSE}|" /aria2/config/aria2.conf
+        sed -i "s|^pause=.*|pause=${PAUSE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${PAUSE_METADATA}" ]; then
-        sed -i "s|pause-metadata=.*|pause-metadata=${PAUSE_METADATA}|" /aria2/config/aria2.conf
+        sed -i "s|^pause-metadata=.*|pause-metadata=${PAUSE_METADATA}|" /aria2/config/aria2.conf
     fi
     if [ -n "${RPC_ALLOW_ORIGIN_ALL}" ]; then
-        sed -i "s|rpc-allow-origin-all=.*|rpc-allow-origin-all=${RPC_ALLOW_ORIGIN_ALL}|" /aria2/config/aria2.conf
+        sed -i "s|^rpc-allow-origin-all=.*|rpc-allow-origin-all=${RPC_ALLOW_ORIGIN_ALL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${RPC_LISTEN_ALL}" ]; then
-        sed -i "s|rpc-listen-all=.*|rpc-listen-all=${RPC_LISTEN_ALL}|" /aria2/config/aria2.conf
+        sed -i "s|^rpc-listen-all=.*|rpc-listen-all=${RPC_LISTEN_ALL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${RPC_LISTEN_PORT}" ]; then
-        sed -i "s|rpc-listen-port=.*|rpc-listen-port=${RPC_LISTEN_PORT}|" /aria2/config/aria2.conf
+        sed -i "s|^rpc-listen-port=.*|rpc-listen-port=${RPC_LISTEN_PORT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${RPC_MAX_REQUEST_SIZE}" ]; then
-        sed -i "s|rpc-max-request-size=.*|rpc-max-request-size=${RPC_MAX_REQUEST_SIZE}|" /aria2/config/aria2.conf
+        sed -i "s|^rpc-max-request-size=.*|rpc-max-request-size=${RPC_MAX_REQUEST_SIZE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${RPC_SAVE_UPLOAD_METADATA}" ]; then
-        sed -i "s|rpc-save-upload-metadata=.*|rpc-save-upload-metadata=${RPC_SAVE_UPLOAD_METADATA}|" /aria2/config/aria2.conf
+        sed -i "s|^rpc-save-upload-metadata=.*|rpc-save-upload-metadata=${RPC_SAVE_UPLOAD_METADATA}|" /aria2/config/aria2.conf
     fi
     if [ -n "${RPC_SECRET}" ]; then
-        sed -i "s|rpc-secret=.*|rpc-secret=${RPC_SECRET}|" /aria2/config/aria2.conf
+        sed -i "s|^rpc-secret=.*|rpc-secret=${RPC_SECRET}|" /aria2/config/aria2.conf
     fi
     if [ -n "${RPC_SECURE}" ]; then
-        sed -i "s|rpc-secure=.*|rpc-secure=${RPC_SECURE}|" /aria2/config/aria2.conf
+        sed -i "s|^rpc-secure=.*|rpc-secure=${RPC_SECURE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ALLOW_OVERWRITE}" ]; then
-        sed -i "s|allow-overwrite=.*|allow-overwrite=${ALLOW_OVERWRITE}|" /aria2/config/aria2.conf
+        sed -i "s|^allow-overwrite=.*|allow-overwrite=${ALLOW_OVERWRITE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ALLOW_PIECE_LENGTH_CHANGE}" ]; then
-        sed -i "s|allow-piece-length-change=.*|allow-piece-length-change=${ALLOW_PIECE_LENGTH_CHANGE}|" /aria2/config/aria2.conf
+        sed -i "s|^allow-piece-length-change=.*|allow-piece-length-change=${ALLOW_PIECE_LENGTH_CHANGE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ALWAYS_RESUME}" ]; then
-        sed -i "s|always-resume=.*|always-resume=${ALWAYS_RESUME}|" /aria2/config/aria2.conf
+        sed -i "s|^always-resume=.*|always-resume=${ALWAYS_RESUME}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ASYNC_DNS}" ]; then
-        sed -i "s|async-dns=.*|async-dns=${ASYNC_DNS}|" /aria2/config/aria2.conf
+        sed -i "s|^async-dns=.*|async-dns=${ASYNC_DNS}|" /aria2/config/aria2.conf
     fi
     if [ -n "${AUTO_FILE_RENAMING}" ]; then
-        sed -i "s|auto-file-renaming=.*|auto-file-renaming=${AUTO_FILE_RENAMING}|" /aria2/config/aria2.conf
+        sed -i "s|^auto-file-renaming=.*|auto-file-renaming=${AUTO_FILE_RENAMING}|" /aria2/config/aria2.conf
     fi
     if [ -n "${AUTO_SAVE_INTERVAL}" ]; then
-        sed -i "s|auto-save-interval=.*|auto-save-interval=${AUTO_SAVE_INTERVAL}|" /aria2/config/aria2.conf
+        sed -i "s|^auto-save-interval=.*|auto-save-interval=${AUTO_SAVE_INTERVAL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${CONDITIONAL_GET}" ]; then
-        sed -i "s|conditional-get=.*|conditional-get=${CONDITIONAL_GET}|" /aria2/config/aria2.conf
+        sed -i "s|^conditional-get=.*|conditional-get=${CONDITIONAL_GET}|" /aria2/config/aria2.conf
     fi
     if [ -n "${CONSOLE_LOG_LEVEL}" ]; then
-        sed -i "s|console-log-level=.*|console-log-level=${CONSOLE_LOG_LEVEL}|" /aria2/config/aria2.conf
+        sed -i "s|^console-log-level=.*|console-log-level=${CONSOLE_LOG_LEVEL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${CONTENT_DISPOSITION_DEFAULT_UTF8}" ]; then
-        sed -i "s|content-disposition-default-utf8=.*|content-disposition-default-utf8=${CONTENT_DISPOSITION_DEFAULT_UTF8}|" /aria2/config/aria2.conf
+        sed -i "s|^content-disposition-default-utf8=.*|content-disposition-default-utf8=${CONTENT_DISPOSITION_DEFAULT_UTF8}|" /aria2/config/aria2.conf
     fi
     if [ -n "${DISABLE_IPV6}" ]; then
-        sed -i "s|disable-ipv6=.*|disable-ipv6=${DISABLE_IPV6}|" /aria2/config/aria2.conf
+        sed -i "s|^disable-ipv6=.*|disable-ipv6=${DISABLE_IPV6}|" /aria2/config/aria2.conf
     fi
     if [ -n "${DISK_CACHE}" ]; then
-        sed -i "s|disk-cache=.*|disk-cache=${DISK_CACHE}|" /aria2/config/aria2.conf
+        sed -i "s|^disk-cache=.*|disk-cache=${DISK_CACHE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${DOWNLOAD_RESULT}" ]; then
-        sed -i "s|download-result=.*|download-result=${DOWNLOAD_RESULT}|" /aria2/config/aria2.conf
+        sed -i "s|^download-result=.*|download-result=${DOWNLOAD_RESULT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ENABLE_COLOR}" ]; then
-        sed -i "s|enable-color=.*|enable-color=${ENABLE_COLOR}|" /aria2/config/aria2.conf
+        sed -i "s|^enable-color=.*|enable-color=${ENABLE_COLOR}|" /aria2/config/aria2.conf
     fi
     if [ -n "${ENABLE_MMAP}" ]; then
-        sed -i "s|enable-mmap=.*|enable-mmap=${ENABLE_MMAP}|" /aria2/config/aria2.conf
+        sed -i "s|^enable-mmap=.*|enable-mmap=${ENABLE_MMAP}|" /aria2/config/aria2.conf
     fi
     if [ -n "${FILE_ALLOCATION}" ]; then
-        sed -i "s|file-allocation=.*|file-allocation=${FILE_ALLOCATION}|" /aria2/config/aria2.conf
+        sed -i "s|^file-allocation=.*|file-allocation=${FILE_ALLOCATION}|" /aria2/config/aria2.conf
     fi
     if [ -n "${FORCE_SAVE}" ]; then
-        sed -i "s|force-save=.*|force-save=${FORCE_SAVE}|" /aria2/config/aria2.conf
+        sed -i "s|^force-save=.*|force-save=${FORCE_SAVE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SAVE_NOT_FOUND}" ]; then
-        sed -i "s|save-not-found=.*|save-not-found=${SAVE_NOT_FOUND}|" /aria2/config/aria2.conf
+        sed -i "s|^save-not-found=.*|save-not-found=${SAVE_NOT_FOUND}|" /aria2/config/aria2.conf
     fi
     if [ -n "${HASH_CHECK_ONLY}" ]; then
-        sed -i "s|hash-check-only=.*|hash-check-only=${HASH_CHECK_ONLY}|" /aria2/config/aria2.conf
+        sed -i "s|^hash-check-only=.*|hash-check-only=${HASH_CHECK_ONLY}|" /aria2/config/aria2.conf
     fi
     if [ -n "${HUMAN_READABLE}" ]; then
-        sed -i "s|human-readable=.*|human-readable=${HUMAN_READABLE}|" /aria2/config/aria2.conf
+        sed -i "s|^human-readable=.*|human-readable=${HUMAN_READABLE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${KEEP_UNFINISHED_DOWNLOAD_RESULT}" ]; then
-        sed -i "s|keep-unfinished-download-result=.*|keep-unfinished-download-result=${KEEP_UNFINISHED_DOWNLOAD_RESULT}|" /aria2/config/aria2.conf
+        sed -i "s|^keep-unfinished-download-result=.*|keep-unfinished-download-result=${KEEP_UNFINISHED_DOWNLOAD_RESULT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_DOWNLOAD_RESULT}" ]; then
-        sed -i "s|max-download-result=.*|max-download-result=${MAX_DOWNLOAD_RESULT}|" /aria2/config/aria2.conf
+        sed -i "s|^max-download-result=.*|max-download-result=${MAX_DOWNLOAD_RESULT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_MMAP_LIMIT}" ]; then
-        sed -i "s|max-mmap-limit=.*|max-mmap-limit=${MAX_MMAP_LIMIT}|" /aria2/config/aria2.conf
+        sed -i "s|^max-mmap-limit=.*|max-mmap-limit=${MAX_MMAP_LIMIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_RESUME_FAILURE_TRIES}" ]; then
-        sed -i "s|max-resume-failure-tries=.*|max-resume-failure-tries=${MAX_RESUME_FAILURE_TRIES}|" /aria2/config/aria2.conf
+        sed -i "s|^max-resume-failure-tries=.*|max-resume-failure-tries=${MAX_RESUME_FAILURE_TRIES}|" /aria2/config/aria2.conf
     fi
     if [ -n "${LOG_LEVEL}" ]; then
-        sed -i "s|log-level=.*|log-level=${LOG_LEVEL}|" /aria2/config/aria2.conf
+        sed -i "s|^log-level=.*|log-level=${LOG_LEVEL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${OPTIMIZE_CONCURRENT_DOWNLOADS}" ]; then
-        sed -i "s|optimize-concurrent-downloads=.*|optimize-concurrent-downloads=${OPTIMIZE_CONCURRENT_DOWNLOADS}|" /aria2/config/aria2.conf
+        sed -i "s|^optimize-concurrent-downloads=.*|optimize-concurrent-downloads=${OPTIMIZE_CONCURRENT_DOWNLOADS}|" /aria2/config/aria2.conf
     fi
     if [ -n "${PIECE_LENGTH}" ]; then
-        sed -i "s|piece-length=.*|piece-length=${PIECE_LENGTH}|" /aria2/config/aria2.conf
+        sed -i "s|^piece-length=.*|piece-length=${PIECE_LENGTH}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SHOW_CONSOLE_READOUT}" ]; then
-        sed -i "s|show-console-readout=.*|show-console-readout=${SHOW_CONSOLE_READOUT}|" /aria2/config/aria2.conf
+        sed -i "s|^show-console-readout=.*|show-console-readout=${SHOW_CONSOLE_READOUT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${STDERR}" ]; then
-        sed -i "s|stderr=.*|stderr=${STDERR}|" /aria2/config/aria2.conf
+        sed -i "s|^stderr=.*|stderr=${STDERR}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SUMMARY_INTERVAL}" ]; then
-        sed -i "s|summary-interval=.*|summary-interval=${SUMMARY_INTERVAL}|" /aria2/config/aria2.conf
+        sed -i "s|^summary-interval=.*|summary-interval=${SUMMARY_INTERVAL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${FORCE_SEQUENTIAL}" ]; then
-        sed -i "s|force-sequential=.*|force-sequential=${FORCE_SEQUENTIAL}|" /aria2/config/aria2.conf
+        sed -i "s|^force-sequential=.*|force-sequential=${FORCE_SEQUENTIAL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_OVERALL_DOWNLOAD_LIMIT}" ]; then
-        sed -i "s|max-overall-download-limit=.*|max-overall-download-limit=${MAX_OVERALL_DOWNLOAD_LIMIT}|" /aria2/config/aria2.conf
+        sed -i "s|^max-overall-download-limit=.*|max-overall-download-limit=${MAX_OVERALL_DOWNLOAD_LIMIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${MAX_DOWNLOAD_LIMIT}" ]; then
-        sed -i "s|max-download-limit=.*|max-download-limit=${MAX_DOWNLOAD_LIMIT}|" /aria2/config/aria2.conf
+        sed -i "s|^max-download-limit=.*|max-download-limit=${MAX_DOWNLOAD_LIMIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${NO_FILE_ALLOCATION_LIMIT}" ]; then
-        sed -i "s|no-file-allocation-limit=.*|no-file-allocation-limit=${NO_FILE_ALLOCATION_LIMIT}|" /aria2/config/aria2.conf
+        sed -i "s|^no-file-allocation-limit=.*|no-file-allocation-limit=${NO_FILE_ALLOCATION_LIMIT}|" /aria2/config/aria2.conf
     fi
     if [ -n "${PARAMETERIZED_URI}" ]; then
-        sed -i "s|parameterized-uri=.*|parameterized-uri=${PARAMETERIZED_URI}|" /aria2/config/aria2.conf
+        sed -i "s|^parameterized-uri=.*|parameterized-uri=${PARAMETERIZED_URI}|" /aria2/config/aria2.conf
     fi
     if [ -n "${QUIET}" ]; then
-        sed -i "s|quiet=.*|quiet=${QUIET}|" /aria2/config/aria2.conf
+        sed -i "s|^quiet=.*|quiet=${QUIET}|" /aria2/config/aria2.conf
     fi
     if [ -n "${REALTIME_CHUNK_CHECKSUM}" ]; then
-        sed -i "s|realtime-chunk-checksum=.*|realtime-chunk-checksum=${REALTIME_CHUNK_CHECKSUM}|" /aria2/config/aria2.conf
+        sed -i "s|^realtime-chunk-checksum=.*|realtime-chunk-checksum=${REALTIME_CHUNK_CHECKSUM}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SAVE_SESSION_INTERVAL}" ]; then
-        sed -i "s|save-session-interval=.*|save-session-interval=${SAVE_SESSION_INTERVAL}|" /aria2/config/aria2.conf
+        sed -i "s|^save-session-interval=.*|save-session-interval=${SAVE_SESSION_INTERVAL}|" /aria2/config/aria2.conf
     fi
     if [ -n "${SOCKET_RECV_BUFFER_SIZE}" ]; then
-        sed -i "s|socket-recv-buffer-size=.*|socket-recv-buffer-size=${SOCKET_RECV_BUFFER_SIZE}|" /aria2/config/aria2.conf
+        sed -i "s|^socket-recv-buffer-size=.*|socket-recv-buffer-size=${SOCKET_RECV_BUFFER_SIZE}|" /aria2/config/aria2.conf
     fi
     if [ -n "${STOP}" ]; then
-        sed -i "s|stop=.*|stop=${STOP}|" /aria2/config/aria2.conf
+        sed -i "s|^stop=.*|stop=${STOP}|" /aria2/config/aria2.conf
     fi
     if [ -n "${TRUNCATE_CONSOLE_READOUT}" ]; then
-        sed -i "s|truncate-console-readout=.*|truncate-console-readout=${TRUNCATE_CONSOLE_READOUT}|" /aria2/config/aria2.conf
+        sed -i "s|^truncate-console-readout=.*|truncate-console-readout=${TRUNCATE_CONSOLE_READOUT}|" /aria2/config/aria2.conf
     fi
     end_time=$(date +%s)
     echo "初始化 aria2 配置完成，耗时：$((end_time - start_time))"
