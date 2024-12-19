@@ -2,9 +2,28 @@
 
 echo "$(date): 更新 BT 服务器"
 
-bt_trackers_list=$(curl -s "${BT_TRACKER_URLS:-https://cf.trackerslist.com/best_aria2.txt}")
+# 初始化结果变量
+bt_trackers_list=""
+
+# 遍历逗号分隔的 URL
+IFS=','  # 设置分隔符为逗号
+for url in $BT_TRACKER_URLS; do
+  # 请求 URL 并获取内容
+  response=$(curl -s "$url" | sed '/^$/d' | tr '\n' ',' | sed 's/,$//')
+  if [ -z "$response" ]; then
+      echo "$(date): $url 获取 BT 列表失败"
+  else
+    # 拼接结果
+    if [ -n "$bt_trackers_list" ]; then
+      bt_trackers_list="$bt_trackers_list,$response"
+    else
+      bt_trackers_list="$response"
+    fi
+  fi
+done
+
 if [ -z "$bt_trackers_list" ]; then
-    echo "$(date): 获取 BT 列表失败"
+    echo "$(date): 获取 BT 全部列表失败"
     return 1
 fi
 

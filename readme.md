@@ -9,21 +9,21 @@
 https://github.com/just-containers/s6-overlay/issues/501
 
 
+# 支持架构
 
+- i686-linux-gnu
 
-i686-linux-gnu
+- s390x-ibm-linux-gnu
 
-s390x-ibm-linux-gnu
+- powerpc64le-unknown-linux-gnu
 
-powerpc64le-unknown-linux-gnu
+- riscv64-unknown-linux-gnu
 
-riscv64-unknown-linux-gnu
+- armv7l-unknown-linux-gnueabihf
 
-armv7l-unknown-linux-gnueabihf
+- aarch64-unknown-linux-gnu
 
-aarch64-unknown-linux-gnu
-
-x86_64-pc-linux-gnu
+- x86_64-pc-linux-gnu
 
 # aria2 依赖包
 
@@ -36,6 +36,9 @@ Libraries: zlib/1.3.1 expat/2.6.3 sqlite3/3.46.1 OpenSSL/3.4.0 c-ares/1.34.2 lib
 |-----------------|--------------------------|--------------------------------------------|
 | BT_TRACKER_CRON | 更新 bt tracker 的 cron 表达式 | 0 8 * * *                                  |
 | BT_TRACKER_URLS | 获取 bt 服务器列表的 url         | https://cf.trackerslist.com/best_aria2.txt |
+
+
+**注意： `BT_TRACKER_URLS` 使用 `,` 分割 url, 里面的内容只支持使用` 空行` 分割或者 `,` 分割**
 
 
 
