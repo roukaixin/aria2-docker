@@ -96,6 +96,8 @@ RUN export S6_HOST=$(cat /tmp/s6_host) && \
     tar -p -C / -Jxpf /tmp/s6-overlay-$S6_HOST.tar.xz && \
     rm -rf /tmp
 
+# supercronic 定时任务
+RUN apk add --no-cache curl supercronic
 
 WORKDIR /aria2
 COPY --from=builder /tmp/aria2/src/aria2c bin/
@@ -116,4 +118,3 @@ EXPOSE 6800 6881-6999/udp 6881-6999
 ENV PATH=/aria2/bin:$PATH S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
 ENTRYPOINT [ "/init" ]
-CMD [ "aria2c", "--conf-path=/aria2/config/aria2.conf" ]

@@ -1,0 +1,3 @@
+#!/command/execlineb -P
+
+aria2c --conf-path=/aria2/config/aria2.conf

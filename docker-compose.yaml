@@ -1,12 +1,12 @@
 services:
   aria2:
     container_name: aria2
-    image: roukaixin/aria2:release-1.37.0
+    build:
+      dockerfile: Dockerfile
     environment:
       CONF_PATH: false
     ports:
       - "6800:6800"
-      - "6881-6999:6881-6999"
     volumes:
       - "./download:/aria2/download"
     networks:
@@ -30,5 +30,6 @@ services:
 
 networks:
   aria2:
+    attachable: true
     name: aria2
     external: false

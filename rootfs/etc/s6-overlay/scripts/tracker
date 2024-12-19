@@ -1,0 +1,36 @@
+#!/command/with-contenv sh
+
+echo "$(date): 更新 BT 服务器"
+
+bt_trackers_list=$(curl -s "${BT_TRACKER_URLS:-https://cf.trackerslist.com/best_aria2.txt}")
+if [ -z "$bt_trackers_list" ]; then
+    echo "$(date): 获取 BT 列表失败"
+    return 1
+fi
+
+
+# 拼接 id 字符串
+id="$(uname -r)_$(date +%s)"
+
+# 将字符串编码为 Base64
+encoded_id=$(echo -n "$id" | base64)
+
+json_data=$(cat <<EOF
+{
+  "id": "${encoded_id}",
+  "jsonrpc": "2.0",
+  "method": "aria2.changeGlobalOption",
+  "params": [
+    "token:${RPC_SECRET:-"12345678"}",
+    {"bt-tracker":"${bt_trackers_list}"}
+  ]
+}
+EOF
+)
+
+repose=$(curl -X POST \
+     -H "Content-Type: application/json" \
+     -d "$json_data" \
+     http://127.0.0.1:"${RPC_LISTEN_PORT:-"6800"}"/jsonrpc)
+
+echo "$(date): 更新 BT 服务器完成。${repose}"

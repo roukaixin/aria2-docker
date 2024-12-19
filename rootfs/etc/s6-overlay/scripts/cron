@@ -1,0 +1,7 @@
+#!/command/with-contenv sh
+
+mkdir -p /aria2/.config/cron/crontabs
+
+echo "${BT_TRACKER_CRON:-0 8 * * *} /etc/s6-overlay/scripts/tracker" > /aria2/.config/cron/crontabs/aria2
+
+supercronic /aria2/.config/cron/crontabs/aria2
