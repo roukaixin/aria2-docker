@@ -28,3 +28,26 @@ x86_64-pc-linux-gnu
 # aria2 依赖包
 
 Libraries: zlib/1.3.1 expat/2.6.3 sqlite3/3.46.1 OpenSSL/3.4.0 c-ares/1.34.2 libssh2/1.11.1
+
+
+# 环境变量
+
+| 变量 | 意思 | 默认值| 
+| ---- | ----|
+| BT_TRACKER_CRON | 更新 bt tracker 的 cron 表达式 | 0 8 * * * |
+| BT_TRACKER_URLS | 获取 bt 服务器列表的 url | https://cf.trackerslist.com/best_aria2.txt |
+
+
+
+# `http` 请求格式
+```json
+{
+  "id": "base64",
+  "jsonrpc": "2.0",
+  "method": "aria2.changeGlobalOption",
+  "params": [
+    "token:12345678",
+    {"bt-tracker":""}
+  ]
+}
+```
