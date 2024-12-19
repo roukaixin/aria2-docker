@@ -38,7 +38,7 @@ Libraries: zlib/1.3.1 expat/2.6.3 sqlite3/3.46.1 OpenSSL/3.4.0 c-ares/1.34.2 lib
 | BT_TRACKER_URLS | 获取 bt 服务器列表的 url         | https://cf.trackerslist.com/best_aria2.txt |
 
 
-**注意： `BT_TRACKER_URLS` 使用 `,` 分割 url, 里面的内容只支持使用` 空行` 分割或者 `,` 分割**
+**注意： `BT_TRACKER_URLS` 使用 `,` 分割 url, 里面的内容只支持使用 `空行` 分割或者 `,` 分割**
 
 
 

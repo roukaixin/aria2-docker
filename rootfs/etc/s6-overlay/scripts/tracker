@@ -9,7 +9,7 @@ bt_trackers_list=""
 IFS=','  # 设置分隔符为逗号
 for url in $BT_TRACKER_URLS; do
   # 请求 URL 并获取内容
-  response=$(curl -s "$url" | sed '/^$/d' | tr '\n' ',' | sed 's/,$//')
+  response=$(wget -O- "$url" | sed '/^$/d' | tr '\n' ',' | sed 's/,$//')
   if [ -z "$response" ]; then
       echo "$(date): $url 获取 BT 列表失败"
   else
@@ -47,9 +47,10 @@ json_data=$(cat <<EOF
 EOF
 )
 
-repose=$(curl -X POST \
-     -H "Content-Type: application/json" \
-     -d "$json_data" \
+repose=$(wget \
+     --header "Content-Type: application/json" \
+     --post-data "$json_data" \
+     -O- \
      http://127.0.0.1:"${RPC_LISTEN_PORT:-"6800"}"/jsonrpc)
 
 echo "$(date): 更新 BT 服务器完成。${repose}"
