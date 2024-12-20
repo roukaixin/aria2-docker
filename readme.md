@@ -32,10 +32,11 @@ Libraries: zlib/1.3.1 expat/2.6.3 sqlite3/3.46.1 OpenSSL/3.4.0 c-ares/1.34.2 lib
 
 # 环境变量
 
-| 变量              | 意思                       | 默认值                                        | 
-|-----------------|--------------------------|--------------------------------------------|
-| BT_TRACKER_CRON | 更新 bt tracker 的 cron 表达式 | 0 8 * * *                                  |
-| BT_TRACKER_URLS | 获取 bt 服务器列表的 url         | https://cf.trackerslist.com/best_aria2.txt |
+| 变量                     | 意思                               | 默认值                                        | 
+|------------------------|----------------------------------|--------------------------------------------|
+| BT_TRACKER_CRON_ENABLE | 是否开始 bt 服务器列表定时任务。可选值：true,false | true                                       |
+| BT_TRACKER_CRON        | 更新 bt tracker 的 cron 表达式         | 0 8 * * *                                  |
+| BT_TRACKER_URLS        | 获取 bt 服务器列表的 url                 | https://cf.trackerslist.com/best_aria2.txt |
 
 
 **注意： `BT_TRACKER_URLS` 使用 `,` 分割 url, 里面的内容只支持使用 `空行` 分割或者 `,` 分割**
