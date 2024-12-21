@@ -1,12 +1,12 @@
 #!/command/with-contenv sh
 
 if [ "${BT_TRACKER_CRON_ENABLE}" = "True" ] || [ "${BT_TRACKER_CRON_ENABLE}" = "true" ]; then
-    echo "开启 bt 服务器列表定时任务"
+    echo "$(date +'%Y-%m-%d %H-%M-%S')  开启 bt 服务器列表定时任务"
     mkdir -p /aria2/.config/cron/crontabs
 
     echo "${BT_TRACKER_CRON:-0 8 * * *} /etc/s6-overlay/scripts/tracker" > /aria2/.config/cron/crontabs/aria2
 
     supercronic /aria2/.config/cron/crontabs/aria2
 else
-    echo "不开启 bt 服务器列表定时任务"
+    echo "$(date +'%Y-%m-%d %H-%M-%S')  不开启 bt 服务器列表定时任务"
 fi

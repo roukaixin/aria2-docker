@@ -97,7 +97,7 @@ RUN export S6_HOST=$(cat /tmp/s6_host) && \
     rm -rf /tmp
 
 # supercronic 定时任务
-RUN apk add --no-cache supercronic
+RUN apk add --no-cache supercronic curl
 
 WORKDIR /aria2
 COPY --from=builder /tmp/aria2/src/aria2c bin/
@@ -115,6 +115,6 @@ USER aria2:aria2
 
 EXPOSE 6800 6881-6999/udp 6881-6999
 
-ENV PATH=/aria2/bin:$PATH S6_BEHAVIOUR_IF_STAGE2_FAILS=2
+ENV PATH=/aria2/bin:$PATH S6_BEHAVIOUR_IF_STAGE2_FAILS=2 BT_TRACKER_CRON_ENABLE=true CONF_PATH=false
 
 ENTRYPOINT [ "/init" ]

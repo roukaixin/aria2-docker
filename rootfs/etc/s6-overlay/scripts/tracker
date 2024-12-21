@@ -1,6 +1,6 @@
 #!/command/with-contenv sh
 
-echo "$(date): 更新 BT 服务器"
+echo "$(date +'%Y-%m-%d %H-%M-%S')  更新 BT 服务器"
 
 # 初始化结果变量
 bt_trackers_list=""
@@ -9,9 +9,10 @@ bt_trackers_list=""
 IFS=','  # 设置分隔符为逗号
 for url in $BT_TRACKER_URLS; do
   # 请求 URL 并获取内容
-  response=$(wget -O- "$url" | sed '/^$/d' | tr '\n' ',' | sed 's/,$//')
+  echo "$(date +'%Y-%m-%d %H-%M-%S')  请求 $url bt 列表"
+  response=$(curl -s "$url" | sed '/^$/d' | tr '\n' ',' | sed 's/,$//')
   if [ -z "$response" ]; then
-      echo "$(date): $url 获取 BT 列表失败"
+      echo "$(date +'%Y-%m-%d %H-%M-%S')  $url 获取 BT 列表失败"
   else
     # 拼接结果
     if [ -n "$bt_trackers_list" ]; then
@@ -23,7 +24,7 @@ for url in $BT_TRACKER_URLS; do
 done
 
 if [ -z "$bt_trackers_list" ]; then
-    echo "$(date): 获取 BT 全部列表失败"
+    echo "$(date +'%Y-%m-%d %H-%M-%S')  获取 BT 全部列表失败"
     return 1
 fi
 
@@ -47,10 +48,9 @@ json_data=$(cat <<EOF
 EOF
 )
 
-repose=$(wget \
-     --header "Content-Type: application/json" \
-     --post-data "$json_data" \
-     -O- \
-     http://127.0.0.1:"${RPC_LISTEN_PORT:-"6800"}"/jsonrpc)
+repose=$(curl -X POST \
+              -H "Content-Type: application/json" \
+              -d "$json_data" \
+              http://127.0.0.1:"${RPC_LISTEN_PORT:-"6800"}"/jsonrpc)
 
-echo "$(date): 更新 BT 服务器完成。${repose}"
+echo "$(date +'%Y-%m-%d %H-%M-%S')  更新 BT 服务器完成。${repose}"
