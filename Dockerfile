@@ -97,7 +97,7 @@ RUN export S6_HOST=$(cat /tmp/s6_host) && \
     rm -rf /tmp
 
 # supercronic 定时任务
-RUN apk add --no-cache supercronic curl
+RUN apk add --no-cache supercronic
 
 WORKDIR /aria2
 COPY --from=builder /tmp/aria2/src/aria2c bin/
