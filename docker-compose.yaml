@@ -4,7 +4,6 @@ services:
     build:
       dockerfile: Dockerfile
     environment:
-      CONF_PATH: false
       BT_TRACKER_URLS: https://cf.trackerslist.com/best_aria2.txt,https://cdn.jsdelivr.net/gh/ngosang/trackerslist@master/trackers_best.txt
     ports:
       - "6800:6800"
