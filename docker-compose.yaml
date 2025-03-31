@@ -4,29 +4,12 @@ services:
     build:
       dockerfile: Dockerfile
     environment:
-      BT_TRACKER_URLS: https://cf.trackerslist.com/best_aria2.txt,https://cdn.jsdelivr.net/gh/ngosang/trackerslist@master/trackers_best.txt
-    ports:
-      - "6800:6800"
+      BT_TRACKER_URLS: https://cf.trackerslist.com/best_aria2.txt
     volumes:
       - "./download:/aria2/download"
     networks:
       - aria2
     restart: unless-stopped
-    dns: 8.8.8.8
-
-  ariang:
-    image: p3terx/ariang
-    container_name: ariang
-    ports:
-      - "6880:6880"
-    logging:
-      options:
-        max-size: 1m
-    networks:
-      - aria2
-    restart: unless-stopped
-    depends_on:
-      - aria2
 
 networks:
   aria2:

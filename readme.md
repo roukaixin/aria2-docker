@@ -8,6 +8,12 @@
 
 https://github.com/just-containers/s6-overlay/issues/501
 
+# 进程管理器
+
+## supervisord
+
+## supervisor
+
 
 # 支持架构
 
