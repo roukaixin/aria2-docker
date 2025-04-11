@@ -67,54 +67,30 @@ FROM alpine:3.20.3
 
 LABEL author=roukaixin
 
-ARG TARGETPLATFORM
-ARG S6_OVERLAY_VERSION=3.2.0.2
-
-
-RUN if [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
-        echo "x86_64" >> /tmp/s6_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/386' ]; then \
-        echo "i686" >> /tmp/s6_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/arm64' ]; then \
-        echo "aarch64" >> /tmp/s6_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/arm/v7' ]; then \
-        echo "armhf" >> /tmp/s6_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/riscv64' ]; then \
-        echo "riscv64" >> /tmp/s6_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/ppc64le' ]; then \
-        echo "powerpc64le" >> /tmp/s6_host; \
-    elif [ ${TARGETPLATFORM} = 'linux/s390x' ]; then \
-        echo "s390x" >> /tmp/s6_host; \
-    else  \
-        echo "x86_64" >> /tmp/s6_host; \
-    fi
-
-RUN export S6_HOST=$(cat /tmp/s6_host) && \
-    wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz && \
-    wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-$S6_HOST.tar.xz && \
-    tar -p -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
-    tar -p -C / -Jxpf /tmp/s6-overlay-$S6_HOST.tar.xz && \
-    rm -rf /tmp
+EXPOSE 6800/tcp 6881-6999/udp 6881-6999/tcp
 
 # supercronic 定时任务
-RUN apk add --no-cache supercronic
+RUN apk add --no-cache  \
+    supercronic \
+    s6-overlay \
+    && rm -rf /var/cache/apk/*
+
+RUN addgroup -S -g 1000 aria2 &&  \
+    adduser -D -G aria2 -u 1000 -h /aria2 aria2
+
+COPY --from=builder /tmp/aria2/src/aria2c /aria2/bin/
+COPY /rootfs/etc/ /etc/
+
+ENV PATH=/aria2/bin:$PATH \
+    HOME=/aria2 \
+    S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
+    BT_TRACKER_CRON_ENABLE=true \
+    CONF_PATH=false
+
+RUN find /etc/s6-overlay/scripts -type f -exec chmod +x {} \;
+
+VOLUME ["/aria2/download", "/aria2/.aria2", "/aria2/config"]
 
 WORKDIR /aria2
-COPY --from=builder /tmp/aria2/src/aria2c bin/
-COPY /rootfs/etc/ /etc/
-RUN mkdir -p config .aria2 download &&  \
-    touch .aria2/aria2.session &&  \
-    cp /etc/aria2/config/aria2.conf config/ && \
-    find /etc/s6-overlay/scripts -type f -exec chmod +x {} \;
-
-RUN addgroup -g 1000 aria2 &&  \
-    adduser -D -G aria2 -u 1000 -h /aria2 aria2  &&  \
-    chown -R aria2:aria2 /aria2
-
-USER aria2:aria2
-
-EXPOSE 6800 6881-6999/udp 6881-6999
-
-ENV PATH=/aria2/bin:$PATH S6_BEHAVIOUR_IF_STAGE2_FAILS=2 BT_TRACKER_CRON_ENABLE=true CONF_PATH=false
 
 ENTRYPOINT [ "/init" ]

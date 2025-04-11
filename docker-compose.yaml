@@ -2,7 +2,7 @@ services:
   aria2:
     container_name: aria2
     build:
-      dockerfile: Dockerfile
+      dockerfile: qemu.Dockerfile
     environment:
       BT_TRACKER_URLS: https://cf.trackerslist.com/best_aria2.txt
     volumes:

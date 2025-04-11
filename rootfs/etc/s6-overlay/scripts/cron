@@ -1,4 +1,4 @@
-#!/command/with-contenv sh
+#!/usr/bin/with-contenv sh
 
 if [ "${BT_TRACKER_CRON_ENABLE}" = "True" ] || [ "${BT_TRACKER_CRON_ENABLE}" = "true" ]; then
     echo "$(date +'%Y-%m-%d %H-%M-%S')  开启 bt 服务器列表定时任务"
