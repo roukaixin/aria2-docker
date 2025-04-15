@@ -40,7 +40,8 @@ RUN apk update && \
     sudo  \
     curl \
     libtasn1-dev \
-    libunistring-dev
+    libunistring-dev  \
+    linux-headers
 
 # 复制全部软件包到 /tmp
 COPY package/ /tmp
