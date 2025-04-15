@@ -39,7 +39,8 @@ RUN apk update && \
     alpine-sdk \
     sudo  \
     curl \
-    libtasn1-dev
+    libtasn1-dev \
+    libunistring-dev
 
 # 复制全部软件包到 /tmp
 COPY package/ /tmp
