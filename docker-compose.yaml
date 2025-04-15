@@ -2,17 +2,26 @@ services:
   aria2:
     container_name: aria2
     build:
-      dockerfile: qemu.Dockerfile
+      dockerfile: qemu-alpine.Dockerfile
     environment:
       BT_TRACKER_URLS: https://cf.trackerslist.com/best_aria2.txt
+      BT_TRACKER_CRON_ENABLE: false
     volumes:
       - "./download:/aria2/download"
-    networks:
-      - aria2
+      - "./.aria2:/aria2/.aria2"
     restart: unless-stopped
+    ports:
+      - "6800:6800"
 
-networks:
-  aria2:
-    attachable: true
-    name: aria2
-    external: false
+  ariang:
+    # 端口 6880
+    image: p3terx/ariang
+    container_name: ariang
+    logging:
+      options:
+        max-size: 1m
+    restart: unless-stopped
+    depends_on:
+      - aria2
+    ports:
+      - "6880:6880"
