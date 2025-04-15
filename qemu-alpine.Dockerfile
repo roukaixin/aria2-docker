@@ -75,14 +75,19 @@ RUN mkdir /tmp/aria2 &&  \
     CXXFLAGS="-std=c++11 -O2" ./configure  \
             ARIA2_STATIC=yes  \
             --with-gnutls \
+            --without-openssl \
             --with-libssh2 \
             --with-libnettle \
+            --without-libgcrypt \
             --with-libgmp  \
             --with-libxml2 \
+            --without-libexpat  \
             --with-libcares  \
             --with-libz  \
             --with-sqlite3  \
             --with-libuv  \
+            --without-wintls  \
+            --without-appletls  \
             --disable-rpath  \
             --enable-static=yes  \
             --enable-shared=no  \
