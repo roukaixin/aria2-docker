@@ -38,7 +38,8 @@ RUN apk update && \
     libuv-static  \
     alpine-sdk \
     sudo  \
-    curl
+    curl \
+    libtasn1-dev
 
 # 复制全部软件包到 /tmp
 COPY package/ /tmp
