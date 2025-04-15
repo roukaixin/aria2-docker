@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv sh
+
+mkdir -p "${HOME}"
+
+mkdir -p "${HOME}/.aria2"
+
+mkdir -p "${HOME}/config"
+
+touch "${HOME}/.aria2/aria2.session" && chmod 0600 "${HOME}/.aria2/aria2.session"
+
+cp /etc/aria2/config/aria2.conf "${HOME}/config" && chmod 0600 "${HOME}/config/aria2.conf"
+
+chown -R 1000:1000 "${HOME}"

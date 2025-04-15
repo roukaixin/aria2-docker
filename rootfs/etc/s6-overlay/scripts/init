@@ -1,7 +1,5 @@
 #!/usr/bin/with-contenv sh
 
-[[ -f ./setup ]] && source ./setup
-
 if [ "${CONF_PATH}" = "False" ] || [ "${CONF_PATH}" = "false" ]; then
     echo "初始化 aria2 配置"
     start_time=$(date +%s)

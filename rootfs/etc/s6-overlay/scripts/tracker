@@ -43,7 +43,7 @@ json_data=$(cat <<EOF
   "method": "aria2.changeGlobalOption",
   "params": [
     "token:${RPC_SECRET:-"12345678"}",
-    {"bt-tracker":"${bt_trackers_list}"}
+    {"bt-tracker":"$bt_trackers_list"}
   ]
 }
 EOF

@@ -1,3 +1,5 @@
 #!/usr/bin/execlineb -P
 
-aria2c --conf-path=/aria2/config/aria2.conf
+s6-setuidgid aria2
+
+aria2c --conf-path=/aria2/config/aria2.conf 2>&1
