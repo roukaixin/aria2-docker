@@ -41,7 +41,8 @@ RUN apk update && \
     curl \
     libtasn1-dev \
     libunistring-dev  \
-    linux-headers
+    linux-headers  \
+    openssl-libs-static
 
 # 复制全部软件包到 /tmp
 COPY package/ /tmp
