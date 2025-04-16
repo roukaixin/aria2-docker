@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM alpine:3.20.3 AS builder
+FROM alpine:edge AS builder
 
 ARG TARGETPLATFORM
 ARG aria2_name
@@ -17,26 +17,25 @@ ARG aria2_version
 
 RUN apk update && \
     apk add --no-cache \
-    g++ \
-    musl-dev  \
-    jemalloc-dev \
-    jemalloc-static \
-    nettle-dev \
-    nettle-static \
-    gmp-dev \
-    gmp-static \
-    libssh2-dev \
-    libssh2-static \
-    c-ares-dev \
-    c-ares-static \
-    libxml2-dev \
-    libxml2-static \
-    zlib-dev \
-    zlib-static \
-    sqlite-dev \
-    sqlite-static \
-    pkgconf-dev \
-    alpine-sdk
+        g++ \
+        musl-dev  \
+        jemalloc-dev \
+        jemalloc-static \
+        nettle-dev \
+        nettle-static \
+        gmp-dev \
+        gmp-static \
+        libssh2-dev \
+        libssh2-static \
+        c-ares-dev \
+        libxml2-dev \
+        libxml2-static \
+        zlib-dev \
+        zlib-static \
+        sqlite-dev \
+        sqlite-static \
+        pkgconf-dev \
+        alpine-sdk
 
 COPY package/* /package
 
