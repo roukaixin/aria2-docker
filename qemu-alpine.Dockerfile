@@ -2,10 +2,6 @@
 FROM alpine:3.20.3 AS builder
 
 ARG TARGETPLATFORM
-# https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz
-ARG gnutls_version=3.8.5
-# https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz
-ARG libtasn1_version=4.20.0
 ARG aria2_name
 ARG aria2_version
 
@@ -17,7 +13,8 @@ ARG aria2_version
 # C-Ares : Async DNS
 # zlib : gzip deflate in http
 # libsqlite3 : firefox3/chromium cookie
-# libuv : async io
+# libuv : async i
+
 RUN apk update && \
     apk add --no-cache \
     g++ \
@@ -40,7 +37,6 @@ RUN apk update && \
     sqlite-static \
     pkgconf-dev \
     alpine-sdk
-
 
 COPY package/* /package
 
