@@ -50,6 +50,8 @@ RUN apk update && \
 # 复制全部软件包到 /tmp
 COPY package/ /tmp
 
+RUN echo $(uname -m)
+
 RUN curl -O https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz && \
     mkdir /tmp/libtasn1 && \
     tar -zxvf libtasn1-${libtasn1_version}.tar.gz -C /tmp/libtasn1 --strip-components=1 && \
