@@ -60,7 +60,6 @@ RUN curl -O https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz
     tar -zxvf libtasn1-${libtasn1_version}.tar.gz -C /tmp/libtasn1 --strip-components=1 && \
     cd /tmp/libtasn1 && \
     ./configure \
-            --host=$(uname -m) \
             --prefix=/usr \
             --sysconfdir=/etc \
             --mandir=/usr/share/man \
@@ -76,7 +75,6 @@ RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls
     tar -Jxvf gnutls-${gnutls_version}.tar.xz -C /tmp/gnutls --strip-components=1 && \
     cd /tmp/gnutls && \
     ./configure \
-    		--host=$(uname -m) \
     		--prefix=/usr \
     		--sysconfdir=/etc \
     		--mandir=/usr/share/man \
