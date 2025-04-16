@@ -6,6 +6,8 @@ ARG TARGETPLATFORM
 ARG gnutls_version=3.8.5
 # https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz
 ARG libtasn1_version=4.20.0
+ARG aria2_name
+ARG aria2_version
 
 # 3.20 版本需要在安装 c-ares-static
 # gnutls : https
@@ -20,6 +22,7 @@ RUN apk update && \
     apk add --no-cache \
     g++ \
     musl-dev  \
+    linux-headers \
     make  \
     pkgconf \
     libssh2-dev \
@@ -38,7 +41,6 @@ RUN apk update && \
     libuv-dev \
     libuv-static  \
     curl \
-    libtasn1-dev \
     libunistring-dev  \
     libunistring-static \
     linux-headers  \
@@ -47,13 +49,6 @@ RUN apk update && \
     jemalloc-dev \
     jemalloc-static
 
-# 复制全部软件包到 /tmp
-COPY package/ /tmp
-
-RUN mkdir /tmp/aria2 &&  \
-    tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1 &&  \
-    cd /tmp/aria2 && \
-    ./config.guess
 
 RUN curl -O https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz && \
     mkdir /tmp/libtasn1 && \
@@ -66,7 +61,7 @@ RUN curl -O https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz
             --localstatedir=/var \
             --disable-silent-rules \
             --enable-static \
-            --disable-shared && \
+            --disable-doc && \
     make && \
     make install
 
@@ -76,22 +71,29 @@ RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls
     cd /tmp/gnutls && \
     ./configure \
     		--prefix=/usr \
-    		--sysconfdir=/etc \
-    		--mandir=/usr/share/man \
-    		--infodir=/usr/share/info \
-    		--enable-ktls \
-    		--disable-openssl-compatibility \
-    		--disable-rpath \
-    		--disable-valgrind-tests \
-            --without-p11-kit \
-    		--enable-static \
-            --disable-shared && \
+            --sysconfdir=/etc \
+            --mandir=/usr/share/man \
+            --infodir=/usr/share/info \
+            --enable-ld-version-script \
+            --enable-cxx \
+            --disable-rpath \
+            --enable-libdane \
+            --without-tpm \
+            --enable-openssl-compatibility \
+            --disable-silent-rules \
+            --with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt \
+            --disable-gtk-doc \
+            --disable-doc \
+            --enable-static && \
     make && \
     make install
 
 
 # 解压 aria2并编译 aria2
-RUN cd /tmp/aria2 && \
+RUN mkdir /tmp/aria2 &&  \
+    curl -O https://github.com/aria2/aria2/releases/download/${aria2_version}/${aria2_name} && \
+    tar xf ${aria2_name} -C /tmp/aria2 --strip-components=1 &&  \
+    cd /tmp/aria2 && \
     CXXFLAGS="-std=c++11 -O2" ./configure  \
             ARIA2_STATIC=yes  \
             --with-gnutls \
