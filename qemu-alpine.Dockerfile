@@ -22,72 +22,32 @@ RUN apk update && \
     apk add --no-cache \
     g++ \
     musl-dev  \
-    linux-headers \
-    make  \
-    pkgconf \
-    libssh2-dev \
-    libssh2-static  \
-    nettle-dev  \
+    jemalloc-dev \
+    jemalloc-static \
+    nettle-dev \
     nettle-static \
     gmp-dev \
-    libxml2-dev \
-    libxml2-static  \
-    c-ares-dev  \
+    gmp-static \
+    libssh2-dev \
+    libssh2-static \
+    c-ares-dev \
     c-ares-static \
-    zlib-dev  \
+    libxml2-dev \
+    libxml2-static \
+    zlib-dev \
     zlib-static \
-    sqlite-dev  \
+    sqlite-dev \
     sqlite-static \
-    libuv-dev \
-    libuv-static  \
-    curl \
-    libunistring-dev  \
-    libunistring-static \
-    linux-headers  \
-    openssl-libs-static \
-    xz-static \
-    jemalloc-dev \
-    jemalloc-static
+    pkgconf-dev \
+    alpine-sdk
 
 
-RUN curl -O https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz && \
-    mkdir /tmp/libtasn1 && \
-    tar -zxvf libtasn1-${libtasn1_version}.tar.gz -C /tmp/libtasn1 --strip-components=1 && \
-    cd /tmp/libtasn1 && \
-    ./configure \
-            --prefix=/usr \
-            --sysconfdir=/etc \
-            --mandir=/usr/share/man \
-            --localstatedir=/var \
-            --disable-silent-rules \
-            --enable-static \
-            --disable-doc && \
-    make && \
-    make install
+COPY package/* /package
 
-RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz && \
-    mkdir /tmp/gnutls && \
-    tar -Jxvf gnutls-${gnutls_version}.tar.xz -C /tmp/gnutls --strip-components=1 && \
-    cd /tmp/gnutls && \
-    ./configure \
-    		--prefix=/usr \
-            --sysconfdir=/etc \
-            --mandir=/usr/share/man \
-            --infodir=/usr/share/info \
-            --enable-ld-version-script \
-            --enable-cxx \
-            --disable-rpath \
-            --enable-libdane \
-            --without-tpm \
-            --enable-openssl-compatibility \
-            --disable-silent-rules \
-            --with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt \
-            --disable-gtk-doc \
-            --disable-doc \
-            --enable-static && \
-    make && \
-    make install
-
+RUN cd /package/gnutls && \
+    abuild-keygen -a -i -n && \
+    abuild -r -F && \
+    find / -iname '*gnutls*'
 
 # 解压 aria2并编译 aria2
 RUN mkdir /tmp/aria2 &&  \
