@@ -37,7 +37,7 @@ RUN apk update && \
         pkgconf-dev \
         alpine-sdk
 
-COPY package/* /package
+COPY package/ /package
 
 RUN cd /package/gnutls && \
     abuild-keygen -a -i -n && \
