@@ -50,7 +50,10 @@ RUN apk update && \
 # 复制全部软件包到 /tmp
 COPY package/ /tmp
 
-RUN echo $(uname -m)
+RUN mkdir /tmp/aria2 &&  \
+    tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1 &&  \
+    cd /tmp/aria2 && \
+    ./config.guess
 
 RUN curl -O https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz && \
     mkdir /tmp/libtasn1 && \
@@ -90,9 +93,7 @@ RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls
 
 
 # 解压 aria2并编译 aria2
-RUN mkdir /tmp/aria2 &&  \
-    tar xf /tmp/aria2-1.37.0.tar.gz -C /tmp/aria2 --strip-components=1 &&  \
-    cd /tmp/aria2 && \
+RUN cd /tmp/aria2 && \
     CXXFLAGS="-std=c++11 -O2" ./configure  \
             ARIA2_STATIC=yes  \
             --with-gnutls \
