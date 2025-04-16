@@ -2,9 +2,10 @@
 FROM alpine:3.20.3 AS builder
 
 ARG TARGETPLATFORM
-ARG TARGETARCH
-ARG package_root=/root/packages/tmp
+# https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz
 ARG gnutls_version=3.8.5
+# https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz
+ARG libtasn1_version=4.20.0
 
 # 3.20 版本需要在安装 c-ares-static
 # gnutls : https
@@ -36,18 +37,32 @@ RUN apk update && \
     sqlite-static \
     libuv-dev \
     libuv-static  \
-    alpine-sdk \
-    sudo  \
     curl \
     libtasn1-dev \
     libunistring-dev  \
+    libunistring-static \
     linux-headers  \
-    openssl-libs-static
+    openssl-libs-static \
+    xz-static
 
 # 复制全部软件包到 /tmp
 COPY package/ /tmp
 
-RUN abuild-keygen -a -i -n
+RUN curl -O https://ftp.gnu.org/gnu/libtasn1/libtasn1-${libtasn1_version}.tar.gz && \
+    mkdir /tmp/libtasn1 && \
+    tar -zxvf libtasn1-${libtasn1_version}.tar.gz -C /tmp/libtasn1 --strip-components=1 && \
+    cd /tmp/libtasn1 && \
+    ./configure \
+            --host=$(uname -m) \
+            --prefix=/usr \
+            --sysconfdir=/etc \
+            --mandir=/usr/share/man \
+            --localstatedir=/var \
+            --disable-silent-rules \
+            --enable-static \
+            --disable-shared && \
+    make && \
+    make install
 
 RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz && \
     mkdir /tmp/gnutls && \
