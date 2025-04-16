@@ -2,6 +2,8 @@
 FROM alpine:edge AS builder
 
 ARG TARGETPLATFORM
+# https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz
+ARG gnutls_version=3.8.5
 ARG aria2_name
 ARG aria2_version
 
@@ -36,15 +38,38 @@ RUN apk update && \
         sqlite-static \
         pkgconf-dev \
         alpine-sdk \
-        sudo
+        sudo \
+        libidn2-dev \
+        libkcapi-dev \
+        libtasn1-dev \
+        libunistring-dev \
+        linux-headers \
+        p11-kit-dev \
+        texinfo \
+        zlib-dev
 
-COPY package/ /package
-
-RUN cd /package/gnutls && \
-    abuild-keygen -a -i -n && \
-    abuild -r -F
-
-RUN ls -la /root/packages/package
+RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz && \
+    mkdir /tmp/gnutls && \
+    tar -Jxvf gnutls-${gnutls_version}.tar.xz -C /tmp/gnutls --strip-components=1 && \
+    cd /tmp/gnutls && \
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--enable-ld-version-script  \
+		--enable-cxx \
+		--disable-rpath \
+		--enable-libdane \
+		--without-tpm \
+		--enable-openssl-compatibility \
+		--disable-silent-rules \
+		--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt \
+		--disable-gtk-doc \
+		--disable-doc \
+		--enable-static && \
+    make && \
+    make install
 
 # 解压 aria2并编译 aria2
 RUN mkdir /tmp/aria2 &&  \
