@@ -77,9 +77,10 @@ RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls
     		--enable-ktls \
     		--disable-openssl-compatibility \
     		--disable-rpath \
-    		--disable-valgrind-tests    \
+    		--disable-valgrind-tests \
             --without-p11-kit \
-    		--enable-static && \
+    		--enable-static \
+            --disable-shared && \
     make && \
     make install
 
