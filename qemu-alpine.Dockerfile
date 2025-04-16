@@ -78,7 +78,7 @@ RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls
 # 解压 aria2并编译 aria2
 RUN mkdir /tmp/aria2 &&  \
     curl -O https://github.com/aria2/aria2/releases/download/${aria2_version}/${aria2_name} && \
-    tar xf ${aria2_name} -C /tmp/aria2 --strip-components=1 &&  \
+    tar -Jxvf ${aria2_name} -C /tmp/aria2 --strip-components=1 &&  \
     cd /tmp/aria2 && \
     CXXFLAGS="-std=c++11 -O2" ./configure  \
             ARIA2_STATIC=yes  \
