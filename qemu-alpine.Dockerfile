@@ -40,13 +40,17 @@ RUN apk update && \
         alpine-sdk \
         sudo \
         libidn2-dev \
+        libidn2-static \
         libkcapi-dev \
         libtasn1-dev \
         libunistring-dev \
+        libunistring-static \
         linux-headers \
         p11-kit-dev \
         texinfo \
-        zlib-dev
+        zlib-dev \
+        zlib-static \
+        curl
 
 RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz && \
     mkdir /tmp/gnutls && \
