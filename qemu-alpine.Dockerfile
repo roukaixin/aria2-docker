@@ -35,7 +35,8 @@ RUN apk update && \
         sqlite-dev \
         sqlite-static \
         pkgconf-dev \
-        alpine-sdk
+        alpine-sdk \
+        sudo
 
 COPY package/ /package
 
