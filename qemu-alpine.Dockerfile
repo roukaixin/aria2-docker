@@ -42,8 +42,9 @@ COPY package/ /package
 
 RUN cd /package/gnutls && \
     abuild-keygen -a -i -n && \
-    abuild -r -F && \
-    find / -iname '*gnutls*'
+    abuild -r -F
+
+RUN ls -la /root/packages/package
 
 # 解压 aria2并编译 aria2
 RUN mkdir /tmp/aria2 &&  \
