@@ -43,7 +43,9 @@ RUN apk update && \
     libunistring-static \
     linux-headers  \
     openssl-libs-static \
-    xz-static
+    xz-static \
+    jemalloc-dev \
+    jemalloc-static
 
 # 复制全部软件包到 /tmp
 COPY package/ /tmp
@@ -111,7 +113,8 @@ RUN mkdir /tmp/aria2 &&  \
             --without-p11-kit \
             --disable-silent-rules  \
             --disable-nls \
-            --with-ca-bundle='/etc/ssl/certs/ca-certificates.crt' &&  \
+            --with-ca-bundle='/etc/ssl/certs/ca-certificates.crt' \
+            --with-jemalloc&&  \
     make &&  \
     strip src/aria2c
 
