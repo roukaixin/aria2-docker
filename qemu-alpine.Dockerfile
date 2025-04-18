@@ -50,9 +50,10 @@ RUN apk update && \
         texinfo \
         zlib-dev \
         zlib-static \
-        curl
+    	libuv-dev \
+    	libuv-static
 
-RUN curl -O https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz && \
+RUN wget https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz && \
     mkdir /tmp/gnutls && \
     tar -Jxvf gnutls-${gnutls_version}.tar.xz -C /tmp/gnutls --strip-components=1 && \
     cd /tmp/gnutls && \
