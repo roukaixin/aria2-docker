@@ -25,7 +25,8 @@ RUN apk update && \
         sqlite-dev \
         sqlite-static \
         zlib-dev \
-        zlib-static
+        zlib-static \
+        linux-headers
 
 RUN wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz && \
     target="" && \
