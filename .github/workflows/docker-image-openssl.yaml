@@ -12,7 +12,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      aria2_name: ${{ steps.set-aria2-var.outputs.aria2_version }}
+      aria2_name: ${{ steps.set-aria2-var.outputs.aria2_name }}
       aria2_version: ${{ steps.set-aria2-var.outputs.aria2_version }}
       is_update: ${{ steps.is-update.outputs.is_update }}
     steps:
@@ -29,7 +29,7 @@ jobs:
         id: is-update
         run: |
           release_version=$(grep 'release=' version| cut -d'=' -f2)
-          if [ "${{ steps.set-aria2-var.outputs.aria2_version }}" != "release_version" ]; then
+          if [ "${{ steps.set-aria2-var.outputs.aria2_version }}" != "$release_version" ]; then
             echo "is_update=true" >> "$GITHUB_OUTPUT"
           else
             echo "Version is up to date."
