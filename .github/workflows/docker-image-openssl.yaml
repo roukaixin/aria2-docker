@@ -28,7 +28,7 @@ jobs:
       - name: is update aria2
         id: is-update
         run: |
-          release_version = $(grep 'release=' version| cut -d'=' -f2)
+          release_version=$(grep 'release=' version| cut -d'=' -f2)
           if [ "${{ steps.set-aria2-var.outputs.aria2_version }}" != "release_version" ]; then
             echo "is_update=true" >> "$GITHUB_OUTPUT"
           else
