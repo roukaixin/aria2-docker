@@ -27,9 +27,9 @@ RUN apk update && \
         zlib-static
 
 RUN wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz && \
-    var target && \
+    target="" && \
     case "$TARGETPLATFORM" in \
-        "linux/arm64/v8")	target="linux-aarch64" ;; \
+        "linux/arm64*")	target="linux-aarch64" ;; \
         "linux/arm/v6")		target="linux-armv4" ;; \
         "linux/arm/v7")		target="linux-armv4" ;; \
         "linux/ppc64le")	target="linux-ppc64le" ;; \
@@ -41,6 +41,7 @@ RUN wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_
     esac && \
     mkdir /tmp/openssl && \
     tar -axvf openssl-${OPENSSL_VERSION}.tar.gz -C /tmp/openssl --strip-components=1 &&  \
+    cd /tmp/openssl && \
     ./Configure $target --libdir=lib no-tests no-shared no-module enable-weak-ssl-ciphers &&  \
     make -j2 &&  \
     make install
