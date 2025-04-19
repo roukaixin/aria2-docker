@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM alpine:3.21.3 AS builder
+FROM alpine:3.20.6 AS builder
 
 ARG TARGETPLATFORM
 ARG aria2_name
@@ -27,6 +27,7 @@ RUN apk update && \
         sqlite-static \
         zlib-dev \
         zlib-static \
+    \
         linux-headers
 
 RUN wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz && \
