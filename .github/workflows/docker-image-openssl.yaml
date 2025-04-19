@@ -2,13 +2,47 @@ name: Docker Image CI Openssl
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: 0 8 * * *
 
 env:
   REGISTRY_IMAGE: roukaixin/aria2
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      aria2_name: ${{ steps.set-aria2-var.outputs.aria2_version }}
+      aria2_version: ${{ steps.set-aria2-var.outputs.aria2_version }}
+      is_update: ${{ steps.is-update.outputs.is_update }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get last aria2 version
+        id: set-aria2-var
+        run: |
+          aria2_name = $(curl -s "https://api.github.com/repos/aria2/aria2/releases/latest" | jq -r '.assets[] | select(.name | endswith(".tar.gz")) | .name')
+          aria2_version = $(curl -s "https://api.github.com/repos/aria2/aria2/releases/latest" | jq -r .tag_name)
+          echo "aria2_name=$aria2_name" >> "$GITHUB_OUTPUT"
+          echo "aria2_version=$aria2_version" >> "$GITHUB_OUTPUT"
+      - name: is update aria2
+        id: is-update
+        run: |
+          release_version = $(grep 'release=' version| cut -d'=' -f2)
+          if [ "${{ steps.set-aria2-var.outputs.aria2_version }}" != "release_version" ]; then
+            echo "is_update=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version is up to date."
+            echo "is_update=false" >> "$GITHUB_OUTPUT"
+          fi
+
   builds:
     runs-on: ubuntu-latest
+    needs: setup
+    if: ${{ needs.setup.outputs.is_update == 'true' }}
+    env:
+      aria2_name: ${{ needs.setup.outputs.aria2_name }}
+      aria2_version: ${{ needs.setup.outputs.aria2_version }}
     strategy:
       fail-fast: false
       matrix:
@@ -50,8 +84,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           build-args: |
-            aria2_name=aria2-1.37.0.tar.gz
-            aria2_version=release-1.37.0
+            aria2_name=${{ env.aria2_name }}
+            aria2_version=${{ env.aria2_version }}
           file: qemu-openssl.Dockerfile
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -74,7 +108,10 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     needs:
+      - setup
       - builds
+    env:
+      aria2_version: ${{ needs.setup.outputs.aria2_version }}
     steps:
       - name: Download digests
         uses: actions/download-artifact@v4
@@ -101,9 +138,32 @@ jobs:
       - name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
-          docker buildx imagetools create -t ${{ env.REGISTRY_IMAGE }}:release-1.37.0 \
+          docker buildx imagetools create -t ${{ env.REGISTRY_IMAGE }}:${{ env.aria2_version }} \
             $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:release-1.37.0
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ env.aria2_version }}
+
+  update:
+    runs-on: ubuntu-latest
+    needs:
+      - setup
+      - merge
+    if: ${{ needs.setup.outputs.is_update == 'true' }}
+    env:
+      aria2_version: ${{ needs.setup.outputs.aria2_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: update aria2 version
+        run: |
+          sed -i 's/^release=.*$/release=${{ env.aria2_version }}/' path/to/version
+      - name: update repo
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: pankx
+          author_email: a3427173515@163.com
+          message: update aria2 version to ${{ env.aria2_version }}
