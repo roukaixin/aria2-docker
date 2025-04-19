@@ -21,6 +21,7 @@ RUN apk update && \
         libssh2-dev \
         libssh2-static \
         c-ares-dev \
+        c-ares-static \
         libxml2-dev \
         libxml2-static \
         sqlite-dev \
@@ -28,7 +29,8 @@ RUN apk update && \
         zlib-dev \
         zlib-static \
     \
-        linux-headers
+        linux-headers \
+    xz-static
 
 RUN wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz && \
     target="" && \
