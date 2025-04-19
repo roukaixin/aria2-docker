@@ -28,19 +28,19 @@ RUN apk update && \
 
 RUN wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz && \
     target="" && \
-    case "$TARGETPLATFORM" in \
-        "linux/arm64*")	target="linux-aarch64" ;; \
-        "linux/arm/v6")		target="linux-armv4" ;; \
-        "linux/arm/v7")		target="linux-armv4" ;; \
-        "linux/ppc64le")	target="linux-ppc64le" ;; \
-        "linux/386")		target="linux-elf" ;; \
-        "linux/amd64")		target="linux-x86_64";;; \
-        "linux/s390x")		target="linux64-s390x";; \
-        "linux/riscv64")	target="linux64-riscv64";; \
-        *)		msg "Unable to determine architecture from (ARCH=$TARGETPLATFORM)" ; return 1 ;; \
+    case "${TARGETPLATFORM}" in \
+        "linux/arm64"*)   target="linux-aarch64" ;; \
+        "linux/arm/v6")   target="linux-armv4" ;; \
+        "linux/arm/v7")   target="linux-armv4" ;; \
+        "linux/ppc64le")  target="linux-ppc64le" ;; \
+        "linux/386")      target="linux-elf" ;; \
+        "linux/amd64")    target="linux-x86_64";; \
+        "linux/s390x")    target="linux64-s390x";; \
+        "linux/riscv64")  target="linux64-riscv64";; \
+        *)		echo "Unable to determine architecture from (ARCH=$TARGETPLATFORM)" ; exit 1 ;; \
     esac && \
     mkdir /tmp/openssl && \
-    tar -axvf openssl-${OPENSSL_VERSION}.tar.gz -C /tmp/openssl --strip-components=1 &&  \
+    tar -axf openssl-${OPENSSL_VERSION}.tar.gz -C /tmp/openssl --strip-components=1 &&  \
     cd /tmp/openssl && \
     ./Configure $target --libdir=lib no-tests no-shared no-module enable-weak-ssl-ciphers &&  \
     make -j2 &&  \
