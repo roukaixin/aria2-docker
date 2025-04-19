@@ -13,6 +13,7 @@ RUN apk update && \
         musl-dev  \
         pkgconf-dev \
         perl-dev \
+        make \
         jemalloc-dev \
         jemalloc-static \
         libuv-dev \
