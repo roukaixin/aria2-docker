@@ -21,8 +21,8 @@ jobs:
       - name: Get last aria2 version
         id: set-aria2-var
         run: |
-          aria2_name = $(curl -s "https://api.github.com/repos/aria2/aria2/releases/latest" | jq -r '.assets[] | select(.name | endswith(".tar.gz")) | .name')
-          aria2_version = $(curl -s "https://api.github.com/repos/aria2/aria2/releases/latest" | jq -r .tag_name)
+          aria2_name=$(curl -s "https://api.github.com/repos/aria2/aria2/releases/latest" | jq -r '.assets[] | select(.name | endswith(".tar.gz")) | .name')
+          aria2_version=$(curl -s "https://api.github.com/repos/aria2/aria2/releases/latest" | jq -r .tag_name)
           echo "aria2_name=$aria2_name" >> "$GITHUB_OUTPUT"
           echo "aria2_version=$aria2_version" >> "$GITHUB_OUTPUT"
       - name: is update aria2
