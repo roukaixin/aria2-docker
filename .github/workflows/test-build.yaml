@@ -9,6 +9,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up QEMU
+      - name: build docker image
         run: |
-          docker compose build --progress plain --build-arg aria2_name=aria2-1.37.0.tar.xz --build-arg aria2_version=release-1.37.0
+          docker compose build --progress plain
