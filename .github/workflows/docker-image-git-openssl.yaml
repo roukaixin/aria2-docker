@@ -1,0 +1,160 @@
+name: Docker Image CI Openssl git version
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 8 * * *
+
+env:
+  REGISTRY_IMAGE: roukaixin/aria2
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      aria2_version: ${{ steps.set-aria2-var.outputs.aria2_version }}
+      is_update: ${{ steps.is-update.outputs.is_update }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get last aria2 version
+        id: set-aria2-var
+        run: |
+          aria2_version=$(git ls-remote https://github.com/aria2/aria2.git HEAD | awk '{print substr($1,1,7)}')
+          echo "aria2_version=git-$aria2_version" >> "$GITHUB_OUTPUT"
+      - name: is update aria2
+        id: is-update
+        run: |
+          aria2_version=$(grep 'git=' version| cut -d'=' -f2)
+          if [ "${{ steps.set-aria2-var.outputs.aria2_version }}" != "$aria2_version" ]; then
+            echo "is_update=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version is up to date."
+            echo "is_update=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  builds:
+    runs-on: ubuntu-latest
+    needs: setup
+    if: ${{ needs.setup.outputs.is_update == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/386
+          - linux/amd64
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/arm64/v8
+          - linux/ppc64le
+          - linux/riscv64
+          - linux/s390x
+    steps:
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          file: qemu-git-openssl.Dockerfile
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    runs-on: ubuntu-latest
+    needs:
+      - setup
+      - builds
+    env:
+      aria2_version: ${{ needs.setup.outputs.aria2_version }}
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create -t ${{ env.REGISTRY_IMAGE }}:${{ env.aria2_version }} \
+            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ env.aria2_version }}
+
+  update:
+    runs-on: ubuntu-latest
+    needs:
+      - setup
+      - merge
+    if: ${{ needs.setup.outputs.is_update == 'true' }}
+    env:
+      aria2_version: ${{ needs.setup.outputs.aria2_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: update aria2 version
+        run: |
+          sed -i 's/^git=.*$/git=${{ env.aria2_version }}/' version
+      - name: update repo
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: pankx
+          author_email: a3427173515@163.com
+          message: update aria2 version to ${{ env.aria2_version }}

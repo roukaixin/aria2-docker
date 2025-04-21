@@ -57,8 +57,8 @@ RUN wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_
     make install
 
 # 解压 aria2并编译 aria2
-RUN git clone https://github.com/aria2/aria2.git aria2 && \
-    cd aria2 && \
+RUN git clone https://github.com/aria2/aria2.git /tmp/aria2 && \
+    cd /tmp/aria2 && \
     autoreconf -i && \
     CXXFLAGS="-std=c++11 -O2" ./configure  \
             ARIA2_STATIC=yes  \
