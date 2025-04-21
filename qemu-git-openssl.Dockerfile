@@ -33,7 +33,8 @@ RUN apk update && \
     cppunit-dev \
     autoconf \
     automake \
-    libtool
+    libtool \
+    git
 
 RUN wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz && \
     target="" && \
