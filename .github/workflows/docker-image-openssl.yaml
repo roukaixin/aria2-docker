@@ -160,7 +160,7 @@ jobs:
           fetch-depth: 0
       - name: update aria2 version
         run: |
-          sed -i 's/^release=.*$/release=${{ env.aria2_version }}/' path/to/version
+          sed -i 's/^release=.*$/release=${{ env.aria2_version }}/' version
       - name: update repo
         uses: EndBug/add-and-commit@v9
         with:
