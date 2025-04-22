@@ -144,6 +144,8 @@ jobs:
     if: ${{ needs.setup.outputs.is_update == 'true' }}
     env:
       aria2_version: ${{ needs.setup.outputs.aria2_version }}
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
