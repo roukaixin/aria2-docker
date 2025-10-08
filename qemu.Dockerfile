@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM debian:trixie-20241016 AS builder
 
-ARG PACKAGE="libuv1-dev perl libgpg-error-dev libsqlite3-dev zlib1g-dev libexpat1-dev libssh2-1-dev libcppunit-dev make pkgconf build-essential"
+ARG PACKAGE="libuv1-dev perl libgpg-error-dev libsqlite3-dev zlib1g-dev libexpat1-dev libssh2-1-dev libcppunit-dev make pkgconf build-essential ca-certificates-bundle"
 ARG TARGETPLATFORM
 
 RUN apt-get update && \
@@ -11,12 +11,12 @@ RUN apt-get update && \
 COPY package/* /tmp
 
 # 编译 c-ares
-RUN mkdir /tmp/c-ares && \
-    tar xf /tmp/c-ares-1.34.2.tar.gz -C /tmp/c-ares --strip-components=1 && \
-    cd /tmp/c-ares && \
-    ./configure --disable-shared --enable-static && \
-    make -j2 && \
-    make install
+#RUN mkdir /tmp/c-ares && \
+#    tar xf /tmp/c-ares-1.34.2.tar.gz -C /tmp/c-ares --strip-components=1 && \
+#    cd /tmp/c-ares && \
+#    ./configure --disable-shared --enable-static && \
+#    make -j2 && \
+#    make install
 
 RUN mkdir /etc/openssl_host && \
     if [ ${TARGETPLATFORM} = 'linux/amd64' ]; then \
@@ -36,15 +36,14 @@ RUN mkdir /etc/openssl_host && \
     fi
 
 # 编译 openssl
-RUN . /etc/environment && \
-    mkdir /tmp/openssl &&  \
+RUN mkdir /tmp/openssl &&  \
     tar xf /tmp/openssl-3.4.0.tar.gz -C /tmp/openssl --strip-components=1 &&  \
     cd /tmp/openssl &&  \
     sed -i '/^default = default_sect/a legacy = legacy_sect' apps/openssl.cnf && \
     sed -i '/^providers = provider_sect/a [legacy_sect]\nactivate = 1' apps/openssl.cnf && \
     sed -i 's/^# activate = 1/activate = 1/' apps/openssl.cnf && \
     export OPENSSL_HOST=$(cat /tmp/openssl_host) && \
-    ./Configure $OPENSSL_HOST --libdir=lib no-tests -no-shared no-module enable-weak-ssl-ciphers &&  \
+    ./Configure $OPENSSL_HOST --libdir=lib no-tests no-shared no-module enable-weak-ssl-ciphers &&  \
     make -j2 &&  \
     make install
 

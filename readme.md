@@ -1,3 +1,5 @@
+构建命令：`docker compose --progress plain build`
+
 可以构建的架构
 - `linux/riscv64`
 
@@ -26,6 +28,8 @@ https://github.com/just-containers/s6-overlay/issues/501
 - riscv64-unknown-linux-gnu
 
 - armv7l-unknown-linux-gnueabihf
+
+- armv7l-unknown-linux-musleabihf
 
 - aarch64-unknown-linux-gnu
 
@@ -61,3 +65,12 @@ Libraries: zlib/1.3.1 expat/2.6.3 sqlite3/3.46.1 OpenSSL/3.4.0 c-ares/1.34.2 lib
   ]
 }
 ```
+
+apk add alpine-sdk sudo
+
+abuild-keygen -a -i -n
+
+abuild -r -F
+
+
+git ls-remote https://github.com/aria2/aria2.git HEAD | awk '{print substr($1,1,7)}'

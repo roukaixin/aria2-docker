@@ -21,37 +21,31 @@ RUN apk update && \
     apk add --no-cache \
         g++ \
         musl-dev  \
+        pkgconf-dev \
         jemalloc-dev \
         jemalloc-static \
-        nettle-dev \
-        nettle-static \
-        gmp-dev \
-        gmp-static \
+        libuv-dev \
+        libuv-static \
         libssh2-dev \
         libssh2-static \
         c-ares-dev \
         libxml2-dev \
         libxml2-static \
-        zlib-dev \
-        zlib-static \
         sqlite-dev \
         sqlite-static \
-        pkgconf-dev \
-        alpine-sdk \
-        sudo \
+        zlib-dev \
+        zlib-static \
+        \
+        nettle-dev \
+        nettle-static \
+        gmp-dev \
+        gmp-static \
         libidn2-dev \
         libidn2-static \
         libkcapi-dev \
         libtasn1-dev \
         libunistring-dev \
-        libunistring-static \
-        linux-headers \
-        p11-kit-dev \
-        texinfo \
-        zlib-dev \
-        zlib-static \
-    	libuv-dev \
-    	libuv-static
+        libunistring-static
 
 RUN wget https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version%.*}/gnutls-${gnutls_version}.tar.xz && \
     mkdir /tmp/gnutls && \
